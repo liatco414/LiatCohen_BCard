@@ -5,6 +5,19 @@ import { NavLink } from "react-router-dom";
 import SignUp from "./SignUp";
 
 function LoggedInNavBar({ setShowLogOutModal, checkIfIsBusiness, isBusiness, isLoggedIn }) {
+    let [userId, setUserId] = useState(null);
+    let userToken = localStorage.getItem("token");
+    useEffect(() => {
+        if (userToken) {
+            try {
+                const decode = jwtDecode(userToken);
+                setUserId(decode._id);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        }
+    }, [userToken]);
+
     useEffect(() => {
         if (isLoggedIn) {
             checkIfIsBusiness();
@@ -73,7 +86,7 @@ function LoggedInNavBar({ setShowLogOutModal, checkIfIsBusiness, isBusiness, isL
                                 </Button>
                             </li>
                             <li className="nav-item">
-                                <NavLink style={{ fontWeight: "900" }} className="nav-link active" aria-current="page" to="/profile">
+                                <NavLink style={{ fontWeight: "900" }} className="nav-link active" aria-current="page" to={`/profile/${userId}`}>
                                     profile
                                 </NavLink>
                             </li>

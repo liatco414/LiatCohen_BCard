@@ -40,7 +40,7 @@ function SignUp({ setIsLoggedIn, onHide }) {
                 houseNumber: "",
                 zip: "",
             },
-            isBusiness: "",
+            isBusiness: false,
         },
         validationSchema: yup.object({
             name: yup
@@ -66,12 +66,12 @@ function SignUp({ setIsLoggedIn, onHide }) {
                 alt: yup.string().min(2, "Alt text must be at least 2 characters").max(256),
             }),
             address: yup.object({
-                state: yup.string().min(2).max(256),
-                country: yup.string().required().min(2).max(256),
-                city: yup.string().required().min(2).max(256),
-                street: yup.string().required().min(2).max(256),
-                houseNumber: yup.number().required().min(2).max(256),
-                zip: yup.number().required().matches(/^\d+$/, "Zip code must be a valid number").min(2).max(256),
+                state: yup.string().min(0).max(256),
+                country: yup.string().required("Country is required").min(2, "Country must contain at least 2 characters").max(256),
+                city: yup.string().required("City is required").min(2, "City must contain at least 2 characters").max(256),
+                street: yup.string().required("Street is required").min(2, "Street must contain at least 2 characters").max(256),
+                houseNumber: yup.number().required("House Number is required").min(1, "House Number must contain at least 1 digit"),
+                zip: yup.number().min(2, "Zip must contain at least 2 digits").required("zip is required"),
             }),
         }),
         onSubmit: async (values) => {

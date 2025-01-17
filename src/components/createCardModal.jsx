@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import CreateCard from "./CreateCard";
 
-function CreateCardModal({ show, onHide, setIsLoggedIn }) {
+function CreateCardModal({ show, onHide, setCards }) {
     return (
         <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered style={{ height: "90%", overflowY: "hidden" }}>
             <Modal.Header closeButton>
@@ -18,7 +18,7 @@ function CreateCardModal({ show, onHide, setIsLoggedIn }) {
                     paddingTop: "140px",
                 }}
             >
-                <CreateCard />
+                <CreateCard show={show} onHide={onHide} setCards={setCards} />
             </Modal.Body>
         </Modal>
     );

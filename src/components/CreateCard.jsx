@@ -1,9 +1,10 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { newCard } from "../services/cardsService";
+import { getAllCards, newCard } from "../services/cardsService";
 import { errorMsg, successMsg } from "../services/feedbackService";
+import { useState } from "react";
 
-function CreateCard() {
+function CreateCard({ onHide, setCards }) {
     let formik = useFormik({
         initialValues: {
             title: "",
@@ -49,10 +50,15 @@ function CreateCard() {
             try {
                 const response = await newCard(values);
                 console.log("Card created successfully:", response);
-                if (response) {
+                const updatedCards = await getAllCards();
+                if (updatedCards) {
                     successMsg("Card created successfully");
+                    onHide();
+                    window.location.reload("/mycards");
                 }
             } catch (error) {
+                console.log(error.response?.data);
+
                 errorMsg("Failed to create card");
             }
         },

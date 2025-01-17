@@ -15,6 +15,9 @@ import MyCards from "./components/MyCards";
 import { jwtDecode } from "jwt-decode";
 import CreateCardModal from "./components/createCardModal";
 import CardDetails from "./components/cardDetails";
+import EditCard from "./components/EditCard";
+import CreateCard from "./components/CreateCard";
+import UpdateUser from "./components/UpdateUser";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,6 +25,11 @@ function App() {
     const [showRegister, setShowRegister] = useState(false);
     const [isBusiness, setIsBusiness] = useState(false);
     const [createCard, setCreateCard] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const handleEditCardModal = () => {
+        setShowEditModal(!showEditModal);
+    };
 
     const handleNewCardModal = () => {
         setCreateCard(!createCard);
@@ -59,12 +67,16 @@ function App() {
     let handleLogOutModal = () => {
         setShowLogOutModal(!showLogOutModal);
     };
+    let navigateToHome = () => {
+        window.location.href = "/";
+    };
 
     let handleUserLogOut = () => {
         setIsLoggedIn(false);
-        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
         setShowLogOutModal(false);
         successMsg("User logged out successfully");
+        navigateToHome();
     };
 
     return (
@@ -75,11 +87,14 @@ function App() {
                     <>
                         <LoggedInNavBar setShowLogOutModal={handleLogOutModal} checkIfIsBusiness={handleBusinessUser} isBusiness={isBusiness} isLoggedIn={isLoggedIn} />
                         <Routes>
-                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/profile/:userId" element={<Profile />} />
                             <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} setIsBusiness={setIsBusiness} />} />
                             <Route path="/logout-modal" element={<LogOutModal />} />
                             <Route path="/favcards" element={<FavCards />} />
-                            <Route path="/mycards" element={<MyCards setCreateCard={handleNewCardModal} />} />
+                            <Route path="/mycards" element={<MyCards setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} />} />
+                            <Route path="/:cardId" element={<CardDetails />} />
+                            <Route path="/cards/:cardId" element={<EditCard />} />
+                            <Route path="profile/:userId/edit-user/:userId" element={<UpdateUser />} />
                         </Routes>
                     </>
                 ) : (

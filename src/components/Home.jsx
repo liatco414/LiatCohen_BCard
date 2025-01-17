@@ -1,29 +1,36 @@
 import { useEffect, useState } from "react";
-import { editCardById, getAllCards } from "../services/cardsService";
+import { cardLikes, editCardById, getAllCards } from "../services/cardsService";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import FavCards from "./FavCards";
 
 function Home() {
     const [loading, setLoading] = useState(true);
-    const userToken = localStorage.getItem("token");
-    const decoded = jwtDecode(userToken);
-    const userId = decoded._id;
-    const [cardId, setCardId] = useState([]);
     const [homeCards, setHomeCards] = useState([]);
     const [displayCount, setDisplayCount] = useState(3);
+    const [userToken, setUserToken] = useState(localStorage.getItem("token"));
+    const [isBusiness, setIsBusiness] = useState(false);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
+        if (userToken) {
+            try {
+                const decoded = jwtDecode(userToken);
+                setUserId(decoded._id);
+                setIsBusiness(decoded.isBusiness);
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+        }
+
         getAllCards()
             .then((res) => {
                 const allCards = res.data;
                 setHomeCards(allCards);
-                const cardsId = res.data.map((card) => card._id);
-                setCardId(cardsId);
                 setLoading(false);
             })
             .catch((error) => console.log(error));
-    }, []);
+    }, [userToken]);
 
     const handleLike = (cardId) => {
         const updatedCards = homeCards.map((card) => {
@@ -35,7 +42,7 @@ function Home() {
                     updatedLikes.push(userId);
                 }
 
-                editCardById(cardId, { likes: updatedLikes })
+                cardLikes(cardId, { likes: updatedLikes })
                     .then(() => {
                         setHomeCards((prevCards) => prevCards.map((prevCard) => (prevCard._id === cardId ? { ...prevCard, likes: updatedLikes } : prevCard)));
                     })
@@ -45,14 +52,12 @@ function Home() {
         });
         setHomeCards(updatedCards);
     };
+
     const loadMore = () => {
         setDisplayCount((prev) => prev + 3);
     };
-    const displayedCards = homeCards.slice(0, displayCount);
 
-    let isLoggedIn = localStorage.getItem("token");
-    let decode = jwtDecode(isLoggedIn);
-    let isBusiness = decode.isBusiness;
+    const displayedCards = homeCards.slice(0, displayCount);
 
     return (
         <>
@@ -78,52 +83,42 @@ function Home() {
                         </div>
                     ) : (
                         displayedCards.map((card) => (
-                            <Link to={`/cards/${card._id}`} key={card._id} style={{ textDecoration: "none" }}>
-                                <div
-                                    className="card"
-                                    style={{ width: "22rem", height: "540px", paddig: "10px", boxShadow: "2px 2px 6px rgb(72, 72, 72)", borderRadius: "15px", overflow: "hidden" }}
-                                    key={card._id}
-                                >
-                                    <div className="img" style={{ height: "58%" }}>
+                            <div
+                                className="card"
+                                style={{ width: "22rem", height: "540px", paddig: "10px", boxShadow: "2px 2px 6px rgb(72, 72, 72)", borderRadius: "15px", overflow: "hidden" }}
+                                key={card._id}
+                            >
+                                <div className="img" style={{ height: "58%" }}>
+                                    <Link to={`${card._id}`} key={card._id} style={{ textDecoration: "none" }}>
                                         <img style={{ height: "100%" }} src={card.image.url} className="card-img-top" alt={card.title} />
+                                    </Link>
+                                </div>
+                                <div className="card-content">
+                                    <div className="card-body">
+                                        <h5 className="card-title">{card.title}</h5>
+                                        <p className="card-text">{card.subtitle}</p>
                                     </div>
-                                    <div className="card-content">
-                                        <div className="card-body">
-                                            <h5 className="card-title">{card.title}</h5>
-                                            <p className="card-text">{card.subtitle}</p>
-                                        </div>
-                                        <ul className="list-group list-group-flush" style={{ height: "80px", overflowY: "scroll", boxShadow: "1px 1px 4px rgb(100, 100, 100)" }}>
-                                            <li className="list-group-item" style={{ padding: "10px" }}>
-                                                {card.description}
-                                            </li>
-                                        </ul>
-                                        <div className="card-body" style={{ height: "30%", display: "flex", alignItems: "center", justifyContent: "end", fontSize: "1.3em", gap: "10px" }}>
-                                            <Link style={{ color: "black" }} to={card.phone}>
-                                                <i className="fa-solid fa-phone"></i>
-                                            </Link>
-                                            {isLoggedIn ? (
-                                                <div onClick={() => handleLike(card._id)}>
-                                                    {card.likes.includes(userId) ? (
-                                                        <i className="fa-solid fa-heart" style={{ cursor: "pointer" }}></i>
-                                                    ) : (
-                                                        <i className="fa-regular fa-heart" style={{ cursor: "pointer" }}></i>
-                                                    )}
-                                                </div>
-                                            ) : null}
-                                            {isLoggedIn && isBusiness && isLoggedIn === card.user_id ? (
-                                                <>
-                                                    <Link style={{ color: "black" }} to={card.phone}>
-                                                        <i className="fa-solid fa-phone"></i>
-                                                    </Link>
-                                                    <Link>
-                                                        <i className="fa-solid fa-pen-to-square"></i>
-                                                    </Link>
-                                                </>
-                                            ) : null}
-                                        </div>
+                                    <ul className="list-group list-group-flush" style={{ height: "80px", overflowY: "scroll", boxShadow: "1px 1px 4px rgb(100, 100, 100)" }}>
+                                        <li className="list-group-item" style={{ padding: "10px" }}>
+                                            {card.description}
+                                        </li>
+                                    </ul>
+                                    <div className="card-body" style={{ height: "30%", display: "flex", alignItems: "center", justifyContent: "end", fontSize: "1.3em", gap: "10px" }}>
+                                        <Link style={{ color: "black" }} to={card.phone}>
+                                            <i className="fa-solid fa-phone"></i>
+                                        </Link>
+                                        {userToken && (
+                                            <div onClick={() => handleLike(card._id)}>
+                                                {card.likes.includes(userId) ? (
+                                                    <i className="fa-solid fa-heart" style={{ cursor: "pointer" }}></i>
+                                                ) : (
+                                                    <i className="fa-regular fa-heart" style={{ cursor: "pointer" }}></i>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         ))
                     )}
                 </div>

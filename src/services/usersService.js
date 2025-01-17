@@ -2,6 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 let apiUsers = `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users`;
+const userToken = localStorage.getItem("token");
 
 export function getAllUsers() {
     return axios.get(apiUsers);
@@ -46,8 +47,8 @@ export function addUser(user) {
         email: user.email,
         password: user.password,
         image: {
-            url: user.image?.url || "",
-            alt: user.image?.alt || "",
+            url: user.image?.url || "https://cdn.pixabay.com/photo/2016/04/01/10/11/avatar-1299805_960_720.png",
+            alt: user.image?.alt || "Default profile picture",
         },
         address: {
             state: user.address.state,
@@ -57,7 +58,7 @@ export function addUser(user) {
             houseNumber: user.address.houseNumber,
             zip: user.address.zip,
         },
-        isBusiness: user.isBusiness || false,
+        isBusiness: Boolean(user.isBusiness) || false,
     });
 
     let config = {
@@ -82,8 +83,6 @@ export function addUser(user) {
 }
 
 export function businessStatus() {
-    const userToken = localStorage.getItem("token");
-
     let config = {
         method: "patch",
         maxBodyLength: Infinity,
@@ -97,6 +96,70 @@ export function businessStatus() {
         .request(config)
         .then((response) => {
             console.log(JSON.stringify(response.data));
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+export function getUserById(userId) {
+    let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `${apiUsers}/${userId}`,
+        headers: {
+            "x-auth-token": userToken,
+        },
+    };
+
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+
+export function updateUser(userId, userData) {
+    let data = JSON.stringify({
+        name: {
+            first: userData.name?.first,
+            middle: userData.name?.middle,
+            last: userData.name?.last,
+        },
+        phone: userData.phone,
+        image: {
+            url: userData.image?.url,
+            alt: userData.image?.alt,
+        },
+        address: {
+            state: userData.address?.state,
+            country: userData.address?.country,
+            city: userData.address?.city,
+            street: userData.address?.street,
+            houseNumber: userData.address?.houseNumber,
+            zip: userData.address?.zip,
+        },
+    });
+
+    let config = {
+        method: "put",
+        maxBodyLength: Infinity,
+        url: `${apiUsers}/${userId}`,
+        headers: {
+            "x-auth-token": userToken,
+            "Content-Type": "application/json",
+        },
+        data: data,
+    };
+
+    return axios
+        .request(config)
+        .then((response) => {
+            console.log(response.data);
             return response.data;
         })
         .catch((error) => {

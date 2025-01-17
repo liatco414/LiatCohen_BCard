@@ -5,41 +5,61 @@ import { Link } from "react-router-dom";
 
 function CardDetails() {
     let { cardId } = useParams();
-    let [currentCard, setCurrentCard] = useState();
+    let [currentCard, setCurrentCard] = useState(null);
+    let [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCard = async () => {
             try {
-                const response = await getCardById(cardId);
-                console.log("API Response:", response);
-                setCurrentCard(response);
+                const cardData = await getCardById(cardId);
+                console.log("Card Data:", cardData);
+                setCurrentCard(cardData);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching card:", error);
+                setLoading(false);
             }
         };
 
         fetchCard();
     }, [cardId]);
-    if (!currentCard) return <p>Loading...</p>;
+
+    if (loading || !currentCard) return <p>Loading...</p>;
 
     return (
         <>
-            <div className="card" style={{ width: "18rem" }} key={currentCard._id}>
-                <h5 className="card-title">{currentCard.title}</h5>
-                <img src={currentCard.image?.url} className="card-img-top" alt={currentCard.image?.alt} />
-                <div className="card-body">
-                    <p className="card-text">{currentCard.description}</p>
+            <div className="cardData" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginTop: "8%", gap: "20px" }}>
+                <h1>{currentCard.title}</h1>
+                <h2>{currentCard.subtitle}</h2>
+                <div className="container" style={{ width: "100%", display: "flex", alignItems: "start", justifyContent: "center", gap: "50px" }}>
+                    <div className="image">
+                        <img
+                            src={currentCard.image.url}
+                            alt={currentCard.image.alt}
+                            style={{
+                                width: "350px",
+                                height: "250px",
+                                objectFit: "cover",
+                                borderRadius: "10px",
+                            }}
+                        />
+                    </div>
+                    <div className="card" style={{ width: "18rem" }} key={currentCard._id}>
+                        <div className="card-body">
+                            <p className="card-text">{currentCard.description}</p>
+                        </div>
+                        <ul className="list-group list-group-flush">
+                            <li className="list-group-item">Phone: {currentCard.phone}</li>
+                            <li className="list-group-item">Email: {currentCard.email}</li>
+                            <li className="list-group-item">
+                                Web: <Link to={currentCard.web}>{currentCard.web}</Link>
+                            </li>
+                            <li className="list-group-item">
+                                Address: {currentCard.address?.street}, {currentCard.address?.city}, {currentCard.address?.state}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">Phone: {currentCard.phone}</li>
-                    <li className="list-group-item">Email: {currentCard.email}</li>
-                    <li className="list-group-item">
-                        Web: <Link to={currentCard.web}>{currentCard.web}</Link>
-                    </li>
-                    <li className="list-group-item">
-                        Address: {currentCard.address?.street}, {currentCard.address?.city}, {currentCard.address?.state}
-                    </li>
-                </ul>
             </div>
         </>
     );
