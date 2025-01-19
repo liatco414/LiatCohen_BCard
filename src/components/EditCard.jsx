@@ -1,9 +1,11 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { errorMsg, successMsg } from "../services/feedbackService";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editCardById, getCardById } from "../services/cardsService";
+import "../css/formEdit.css";
+import { appThemes, navBarThemes } from "../App";
 
 function EditCard() {
     const [cardData, setCardData] = useState(null);
@@ -84,39 +86,13 @@ function EditCard() {
         },
     });
 
-    if (!cardData) {
-        return <div>Loading...</div>;
-    }
+    const theme = useContext(appThemes);
 
     return (
         <>
-            <div
-                className="form-container"
-                style={{
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "8%",
-                    marginBottom: "2%",
-                    gap: "10px",
-                }}
-            >
+            <div className="form-container" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <h1>Edit Card</h1>
-                <form
-                    className="form-floating"
-                    onSubmit={formik.handleSubmit}
-                    style={{
-                        width: "55%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        border: "1px solid grey",
-                        padding: "20px",
-                    }}
-                >
+                <form className="form-floating edits" onSubmit={formik.handleSubmit}>
                     <div className="rowOne" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
                             <input
@@ -365,8 +341,8 @@ function EditCard() {
                         </div>
                     </div>
 
-                    <div className="submitBtn" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "15px" }}>
-                        <button className="btn btn-dark" type="submit">
+                    <div className="submitBtn">
+                        <button className="btn btn-outline-dark" type="submit" style={{ backgroundColor: theme.color, color: theme.background }}>
                             Update Card
                         </button>
                     </div>

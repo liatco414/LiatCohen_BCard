@@ -2,9 +2,10 @@ import { errorMsg, successMsg } from "../services/feedbackService";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { addUser, loginUser } from "../services/usersService";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import LoggedInNavBar from "./LoggedInNavBar";
+import { appThemes } from "../App";
 
 function SignUp({ setIsLoggedIn, onHide }) {
     const [isBusiness, setIsBusiness] = useState(false);
@@ -77,21 +78,24 @@ function SignUp({ setIsLoggedIn, onHide }) {
         onSubmit: async (values) => {
             try {
                 let response = await addUser(values);
-                console.log("User Added Response:", response);
 
                 if (response) {
-                    setIsLoggedIn(true);
-                    onHide();
-                    successMsg("User registered successfully");
+                    console.log(response);
+                    successMsg("User registered successfully, login to confirm user");
+                    setTimeout(() => {
+                        window.location.href = "/login";
+                        onHide();
+                    }, 2500);
                     handleBusinessUser();
                 }
             } catch (error) {
-                console.log(error);
+                console.log(error.response?.data);
 
                 errorMsg("An error occured while signing up, please try again later");
             }
         },
     });
+    const theme = useContext(appThemes);
     return (
         <>
             <div className="containerRegister" style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -185,7 +189,12 @@ function SignUp({ setIsLoggedIn, onHide }) {
                             <input type="checkbox" name="isBusiness" checked={formik.values.isBusiness} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             <span style={{ margin: "5px" }}> Is this a business?</span>
                         </label>
-                        <button className="btn btn-dark" type="submit">
+                        <button
+                            className="btn btn-dark"
+                            type="submit"
+                            disabled={!formik.isValid || Object.values(formik.values).some((value) => value === "")}
+                            style={{ backgroundColor: theme.color, color: theme.background }}
+                        >
                             Register
                         </button>
                     </div>

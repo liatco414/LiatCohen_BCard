@@ -4,7 +4,7 @@ import SignUp from "./components/SignUp";
 import Profile from "./components/Profile";
 import NavBar from "./components/NavBar";
 import LogIn from "./components/LogIn";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import LoggedInNavBar from "./components/LoggedInNavBar";
 import LogOutModal from "./components/LogOutModal";
 import { ToastContainer } from "react-toastify";
@@ -18,6 +18,57 @@ import CardDetails from "./components/cardDetails";
 import EditCard from "./components/EditCard";
 import CreateCard from "./components/CreateCard";
 import UpdateUser from "./components/UpdateUser";
+import "./App.css";
+import About from "./components/About";
+import Footer from "./components/Footer";
+
+const themes = {
+    light: {
+        background: "rgb(250, 242, 255)",
+        color: "black",
+        shadow: "3px 3px 8px black",
+        btn: "black",
+    },
+    dark: {
+        background: "rgb(67, 63, 70)",
+        color: "white",
+        shadow: "3px 3px 8px white",
+        btn: "white",
+    },
+};
+
+const navBarTheme = {
+    light: {
+        background: "rgba(137, 54, 238, 0.67)",
+        color: "black",
+        shadow: "3px 3px 8px black",
+        btn: "rgba(250, 242, 255, 0)",
+        btnTxtColor: "white",
+    },
+    dark: {
+        background: "rgb(25, 23, 28)",
+        color: "rgb(231, 218, 245)",
+        shadow: "3px 3px 8px white",
+        btn: "rgb(250, 242, 255)",
+        btnTxtColor: "black",
+    },
+};
+const cardThemes = {
+    light: {
+        background: "rgb(250, 242, 255)",
+        color: "black",
+        shadow: "2px 2px 5px black",
+    },
+    dark: {
+        background: "rgb(36, 35, 36)",
+        color: "rgb(231, 218, 245)",
+        shadow: "2px 2px 5px white",
+    },
+};
+
+export let cardTheme = createContext(cardThemes.light);
+export let appThemes = createContext(themes.light);
+export let navBarThemes = createContext(navBarTheme.light);
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +77,27 @@ function App() {
     const [isBusiness, setIsBusiness] = useState(false);
     const [createCard, setCreateCard] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [darkMode, setDarkMode] = useState(false);
+
+    useEffect(() => {
+        const savedMode = localStorage.getItem("ModeState");
+        if (savedMode) {
+            setDarkMode(savedMode === "true");
+        }
+    }, []);
+
+    const handleModeChange = () => {
+        setDarkMode((prevMode) => {
+            const newMode = !prevMode;
+            localStorage.setItem("ModeState", newMode);
+            return newMode;
+        });
+    };
+
+    const handleSearchChange = (term) => {
+        setSearchTerm(term);
+    };
 
     const handleEditCardModal = () => {
         setShowEditModal(!showEditModal);
@@ -85,33 +157,62 @@ function App() {
             <BrowserRouter>
                 {isLoggedIn ? (
                     <>
-                        <LoggedInNavBar setShowLogOutModal={handleLogOutModal} checkIfIsBusiness={handleBusinessUser} isBusiness={isBusiness} isLoggedIn={isLoggedIn} />
-                        <Routes>
-                            <Route path="/profile/:userId" element={<Profile />} />
-                            <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} setIsBusiness={setIsBusiness} />} />
-                            <Route path="/logout-modal" element={<LogOutModal />} />
-                            <Route path="/favcards" element={<FavCards />} />
-                            <Route path="/mycards" element={<MyCards setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} />} />
-                            <Route path="/:cardId" element={<CardDetails />} />
-                            <Route path="/cards/:cardId" element={<EditCard />} />
-                            <Route path="profile/:userId/edit-user/:userId" element={<UpdateUser />} />
-                        </Routes>
+                        <navBarThemes.Provider value={darkMode ? navBarTheme.dark : navBarTheme.light}>
+                            <LoggedInNavBar
+                                setShowLogOutModal={handleLogOutModal}
+                                checkIfIsBusiness={handleBusinessUser}
+                                isBusiness={isBusiness}
+                                isLoggedIn={isLoggedIn}
+                                onSearchChange={handleSearchChange}
+                                onModeChange={handleModeChange}
+                            />
+                        </navBarThemes.Provider>
+                        <cardTheme.Provider value={darkMode ? cardThemes.dark : cardThemes.light}>
+                            <appThemes.Provider value={darkMode ? themes.dark : themes.light}>
+                                <Routes>
+                                    <Route path="/profile/:userId" element={<Profile />} />
+                                    <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} setIsBusiness={setIsBusiness} searchTerm={searchTerm} />} />
+                                    <Route path="/logout-modal" element={<LogOutModal />} />
+                                    <Route path="/favcards" element={<FavCards />} />
+                                    <Route path="/mycards" element={<MyCards setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} searchTerm={searchTerm} />} />{" "}
+                                    <Route path="/:cardId" element={<CardDetails />} />
+                                    <Route path="/cards/:cardId" element={<EditCard />} />
+                                    <Route path="profile/:userId/edit-user/:userId" element={<UpdateUser />} />
+                                    <Route path="/about" element={<About />} />
+                                </Routes>
+                                <navBarThemes.Provider value={darkMode ? navBarTheme.dark : navBarTheme.light}>
+                                    <Footer />
+                                </navBarThemes.Provider>
+                            </appThemes.Provider>
+                        </cardTheme.Provider>
                     </>
                 ) : (
                     <>
-                        <NavBar setShowRegister={handleRegisterModal} setIsLoggedIn={setIsLoggedIn} />
-                        <Routes>
-                            <Route exact path="/cards/:cardId" element={<CardDetails />} />
-                            <Route path="/" element={<Home />} />
-                            <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
-                            <Route path="/signup" element={<SignUp setIsLoggedIn={setIsLoggedIn} onHide={handleLogOutModal} handleAddUser={handleAddUser} />} />
-                        </Routes>
+                        <navBarThemes.Provider value={darkMode ? navBarTheme.dark : navBarTheme.light}>
+                            <NavBar setShowRegister={handleRegisterModal} setIsLoggedIn={setIsLoggedIn} onSearchChange={handleSearchChange} onModeChange={handleModeChange} />
+                        </navBarThemes.Provider>
+                        <cardTheme.Provider value={darkMode ? cardThemes.dark : cardThemes.light}>
+                            <appThemes.Provider value={darkMode ? themes.dark : themes.light}>
+                                <Routes>
+                                    <Route exact path="/cards/:cardId" element={<CardDetails />} />
+                                    <Route path="/" element={<Home searchTerm={searchTerm} />} />
+                                    <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
+                                    <Route path="/signup" element={<SignUp setIsLoggedIn={setIsLoggedIn} onHide={handleLogOutModal} handleAddUser={handleAddUser} />} />
+                                    <Route path="/about" element={<About />} />
+                                </Routes>
+                                <navBarThemes.Provider value={darkMode ? navBarTheme.dark : navBarTheme.light}>
+                                    <Footer />
+                                </navBarThemes.Provider>
+                            </appThemes.Provider>
+                        </cardTheme.Provider>
                     </>
                 )}
             </BrowserRouter>
-            <LogOutModal show={showLogOutModal} onHide={handleLogOutModal} handleLogOut={handleUserLogOut} />
-            <SignUpModal show={showRegister} onHide={handleRegisterModal} setIsLoggedIn={setIsLoggedIn} />
-            <CreateCardModal show={createCard} onHide={handleNewCardModal} />
+            <appThemes.Provider value={darkMode ? themes.dark : themes.light}>
+                <LogOutModal show={showLogOutModal} onHide={handleLogOutModal} handleLogOut={handleUserLogOut} />
+                <SignUpModal show={showRegister} onHide={handleRegisterModal} setIsLoggedIn={setIsLoggedIn} />
+                <CreateCardModal show={createCard} onHide={handleNewCardModal} />
+            </appThemes.Provider>
         </>
     );
 }

@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { cardLikes, editCardById, getAllCards } from "../services/cardsService";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import FavCards from "./FavCards";
+import { appThemes, cardTheme } from "../App";
 
-function Home() {
+function Home({ searchTerm }) {
     const [loading, setLoading] = useState(true);
     const [homeCards, setHomeCards] = useState([]);
     const [displayCount, setDisplayCount] = useState(3);
     const [userToken, setUserToken] = useState(localStorage.getItem("token"));
     const [isBusiness, setIsBusiness] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [filteredCards, setFilteredCards] = useState([]);
 
     useEffect(() => {
         if (userToken) {
@@ -27,10 +29,25 @@ function Home() {
             .then((res) => {
                 const allCards = res.data;
                 setHomeCards(allCards);
+                setFilteredCards(allCards);
                 setLoading(false);
             })
             .catch((error) => console.log(error));
     }, [userToken]);
+
+    useEffect(() => {
+        if (searchTerm) {
+            const filtered = homeCards.filter(
+                (card) =>
+                    card.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    card.subtitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    card.description?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredCards(filtered);
+        } else {
+            setFilteredCards(homeCards);
+        }
+    }, [searchTerm, homeCards]);
 
     const handleLike = (cardId) => {
         const updatedCards = homeCards.map((card) => {
@@ -57,13 +74,25 @@ function Home() {
         setDisplayCount((prev) => prev + 3);
     };
 
-    const displayedCards = homeCards.slice(0, displayCount);
-
+    const displayedCards = searchTerm ? filteredCards.slice(0, displayCount) : homeCards.slice(0, displayCount);
+    const theme = useContext(appThemes);
+    const themeCard = useContext(cardTheme);
     return (
         <>
             <div
                 className="container-home"
-                style={{ paddingTop: "7%", width: "100%", height: "100%", display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", marginBottom: "20px" }}
+                style={{
+                    paddingTop: "7%",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    paddingBottom: "20px",
+                    backgroundColor: theme.background,
+                    color: theme.color,
+                }}
             >
                 <div className="h1p" style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                     <h1>Business cards</h1>
@@ -75,7 +104,7 @@ function Home() {
                 </div>
                 <div
                     className="business-cards"
-                    style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, 28rem)", alignItems: "center", justifyContent: "center", gap: "20px", padding: "30px" }}
+                    style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, 400px)", alignItems: "center", justifyContent: "center", gap: "20px", padding: "30px" }}
                 >
                     {loading ? (
                         <div style={{ display: "grid", gridColumn: "span 3", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
@@ -85,26 +114,42 @@ function Home() {
                         displayedCards.map((card) => (
                             <div
                                 className="card"
-                                style={{ width: "22rem", height: "540px", paddig: "10px", boxShadow: "2px 2px 6px rgb(72, 72, 72)", borderRadius: "15px", overflow: "hidden" }}
+                                style={{
+                                    backgroundColor: themeCard.background,
+                                    color: themeCard.color,
+                                    width: "22rem",
+                                    height: "540px",
+                                    paddnig: "10px",
+                                    boxShadow: themeCard.shadow,
+                                    borderRadius: "15px",
+                                    overflow: "hidden",
+                                }}
                                 key={card._id}
                             >
                                 <div className="img" style={{ height: "58%" }}>
                                     <Link to={`${card._id}`} key={card._id} style={{ textDecoration: "none" }}>
-                                        <img style={{ height: "100%" }} src={card.image.url} className="card-img-top" alt={card.title} />
+                                        <img style={{ height: "100%", boxShadow: themeCard.shadow }} src={card.image.url} className="card-img-top" alt={card.title} />
                                     </Link>
                                 </div>
                                 <div className="card-content">
                                     <div className="card-body">
-                                        <h5 className="card-title">{card.title}</h5>
-                                        <p className="card-text">{card.subtitle}</p>
+                                        <h5 className="card-title" style={{ backgroundColor: themeCard.background, color: themeCard.color, fontWeight: "900" }}>
+                                            {card.title}
+                                        </h5>
+                                        <p className="card-text" style={{ backgroundColor: themeCard.background, color: themeCard.color }}>
+                                            {card.subtitle}
+                                        </p>
                                     </div>
-                                    <ul className="list-group list-group-flush" style={{ height: "80px", overflowY: "scroll", boxShadow: "1px 1px 4px rgb(100, 100, 100)" }}>
-                                        <li className="list-group-item" style={{ padding: "10px" }}>
+                                    <ul
+                                        className="list-group list-group-flush"
+                                        style={{ height: "80px", overflowY: "scroll", boxShadow: themeCard.shadow, backgroundColor: themeCard.background, color: themeCard.color }}
+                                    >
+                                        <li className="list-group-item" style={{ padding: "10px", backgroundColor: themeCard.background, color: themeCard.color }}>
                                             {card.description}
                                         </li>
                                     </ul>
                                     <div className="card-body" style={{ height: "30%", display: "flex", alignItems: "center", justifyContent: "end", fontSize: "1.3em", gap: "10px" }}>
-                                        <Link style={{ color: "black" }} to={card.phone}>
+                                        <Link style={{ backgroundColor: themeCard.background, color: themeCard.color }} to={card.phone}>
                                             <i className="fa-solid fa-phone"></i>
                                         </Link>
                                         {userToken && (

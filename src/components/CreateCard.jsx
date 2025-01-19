@@ -2,9 +2,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { getAllCards, newCard } from "../services/cardsService";
 import { errorMsg, successMsg } from "../services/feedbackService";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { appThemes } from "../App";
 
 function CreateCard({ onHide, setCards }) {
+    const theme = useContext(appThemes);
     let formik = useFormik({
         initialValues: {
             title: "",
@@ -63,6 +65,7 @@ function CreateCard({ onHide, setCards }) {
             }
         },
     });
+    const placeholderColor = theme === "dark" ? "#bbb" : "#888";
 
     return (
         <>
@@ -78,7 +81,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputTitle">Title</label>
+                        <label htmlFor="inputTitle" style={{ color: "black" }}>
+                            Title
+                        </label>
                         {formik.touched.title && formik.errors.title && <p className="text-danger">{formik.errors.title}</p>}
                     </div>
                     <div className="form-floating mb-3">
@@ -91,7 +96,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputSubtitle">Subtitle</label>
+                        <label htmlFor="inputSubtitle" style={{ color: "black" }}>
+                            Subtitle
+                        </label>
                         {formik.touched.subtitle && formik.errors.subtitle && <p className="text-danger">{formik.errors.subtitle}</p>}
                     </div>
                 </div>
@@ -109,7 +116,9 @@ function CreateCard({ onHide, setCards }) {
                             value={formik.values.description}
                             style={{ height: "110px", width: "240px" }}
                         ></textarea>
-                        <label htmlFor="inputDescription">Description</label>
+                        <label htmlFor="inputDescription" style={{ color: "black" }}>
+                            Description
+                        </label>
                         {formik.touched.description && formik.errors.description && <p className="text-danger">{formik.errors.description}</p>}
                     </div>
                 </div>
@@ -124,7 +133,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputZip">Phone</label>
+                        <label htmlFor="inputZip" style={{ color: "black" }}>
+                            Phone
+                        </label>
                         {formik.touched.phone && formik.errors.phone && <p className="text-danger">{formik.errors.phone}</p>}
                     </div>
                     <div className="form-floating mb-3">
@@ -137,29 +148,39 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputEmail">Email Adress</label>
+                        <label htmlFor="inputEmail" style={{ color: "black" }}>
+                            Email Adress
+                        </label>
                         {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                     </div>
                     <div className="form-floating mb-3">
                         <input type="text" className="form-control" id="inputWeb" placeholder="Web" name="web" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        <label htmlFor="inputWeb">Web</label>
+                        <label htmlFor="inputWeb" style={{ color: "black" }}>
+                            Web
+                        </label>
                         {formik.touched.web && formik.errors.web && <p className="text-danger">{formik.errors.web}</p>}
                     </div>
                 </div>
                 <div className="rowThree" style={{ display: "flex", gap: "20px" }}>
                     <div className="form-floating mb-3">
                         <input type="url" className="form-control" id="inputImage" placeholder="Image URL" name="image.url" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        <label htmlFor="inputImage">Image URL</label>
+                        <label htmlFor="inputImage" style={{ color: "black" }}>
+                            Image URL
+                        </label>
                     </div>
                     <div className="form-floating mb-3">
                         <input type="text" className="form-control" id="inputAlt" placeholder="Image Alt" name="image.alt" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        <label htmlFor="inputAlt">Image Alt</label>
+                        <label htmlFor="inputAlt" style={{ color: "black" }}>
+                            Image Alt
+                        </label>
                     </div>
                 </div>
                 <div className="rowFour" style={{ display: "flex", gap: "20px" }}>
                     <div className="form-floating mb-3">
                         <input type="text" className="form-control" id="inputState" placeholder="State" name="address.state" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        <label htmlFor="inputState">State</label>
+                        <label htmlFor="inputState" style={{ color: "black" }}>
+                            State
+                        </label>
                     </div>
                     <div className="form-floating mb-3">
                         <input
@@ -177,7 +198,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputCountry">Country</label>
+                        <label htmlFor="inputCountry" style={{ color: "black" }}>
+                            Country
+                        </label>
                         {formik.touched.address?.country && formik.errors.address?.country && <p className="text-danger">{formik.errors.address.country}</p>}
                     </div>
                     <div className="form-floating mb-3">
@@ -196,7 +219,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputCity">City</label>
+                        <label htmlFor="inputCity" style={{ color: "black" }}>
+                            City
+                        </label>
                         {formik.touched.address?.city && formik.errors.address?.city && <p className="text-danger">{formik.errors.address.city}</p>}
                     </div>
                 </div>
@@ -217,7 +242,9 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputCinty">Street</label>
+                        <label htmlFor="inputCinty" style={{ color: "black" }}>
+                            Street
+                        </label>
                         {formik.touched.address?.street && formik.errors.address?.street && <p className="text-danger">{formik.errors.address.street}</p>}
                     </div>
                     <div className="form-floating mb-3">
@@ -236,12 +263,16 @@ function CreateCard({ onHide, setCards }) {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        <label htmlFor="inputCinty">House Number</label>
+                        <label htmlFor="inputCinty" style={{ color: "black" }}>
+                            House Number
+                        </label>
                         {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                     </div>
                     <div className="form-floating mb-3">
                         <input type="number" className="form-control" id="inputZip" placeholder="Zip" name="address.zip" onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                        <label htmlFor="inputZip">Zip</label>
+                        <label htmlFor="inputZip" style={{ color: "black" }}>
+                            Zip
+                        </label>
                     </div>
                 </div>
                 <div className="submitBtn" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "15px" }}>

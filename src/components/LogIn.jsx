@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/usersService";
 import { jwtDecode } from "jwt-decode";
 import { errorMsg, successMsg } from "../services/feedbackService";
+import { useContext } from "react";
+import { appThemes } from "../App";
 
 function LogIn({ setIsLoggedIn }) {
     let nav = useNavigate();
+    const theme = useContext(appThemes);
 
     let formik = useFormik({
         initialValues: {
@@ -14,11 +17,12 @@ function LogIn({ setIsLoggedIn }) {
             password: "",
         },
         validationSchema: yup.object({
-            email: yup.string().required().email(),
+            email: yup.string().min(5).required().email(),
             password: yup
                 .string()
                 .required()
-                .min(8)
+                .min(7)
+                .max(20)
                 .matches(/[!@%$#^&*-_*]/),
         }),
         onSubmit: (values) => {
@@ -33,7 +37,11 @@ function LogIn({ setIsLoggedIn }) {
                     }
                 })
                 .catch((error) => {
-                    errorMsg("User does not exist please register first!");
+                    if (error.response && error.response.status === 401) {
+                        errorMsg("Incorrect password or email, please try again.");
+                    } else {
+                        errorMsg("User does not exist, please register first.");
+                    }
                 });
         },
     });
@@ -42,14 +50,16 @@ function LogIn({ setIsLoggedIn }) {
             <div
                 className="login-form"
                 style={{
-                    marginTop: "90px",
+                    paddingTop: "90px",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
                     width: "100%",
-                    height: "100%",
+                    height: "100vh",
                     gap: "60px",
+                    backgroundColor: theme.background,
+                    color: theme.color,
                 }}
             >
                 <h1 style={{ fontSize: "3em", fontWeight: "900" }}>Log-in</h1>
@@ -72,7 +82,7 @@ function LogIn({ setIsLoggedIn }) {
                         <label htmlFor="floatingPassword">Password</label>
                         {formik.touched.password && formik.errors.password && <p className="text-danger">{formik.errors.password}</p>}
                     </div>
-                    <button className="btn btn-dark" type="submit" disabled={!formik.dirty || !formik.isValid}>
+                    <button style={{ backgroundColor: theme.color, color: theme.background }} className="btn btn-dark" type="submit" disabled={!formik.dirty || !formik.isValid}>
                         login
                     </button>
                     <p>

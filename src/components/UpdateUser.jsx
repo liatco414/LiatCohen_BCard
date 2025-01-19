@@ -1,14 +1,17 @@
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getUserById, updateUser } from "../services/usersService";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { successMsg } from "../services/feedbackService";
+import "../css/formEdit.css";
+import { appThemes } from "../App";
 
 function UpdateUser() {
     let [userUpdate, setUserUpdate] = useState(null);
     let { userId } = useParams();
     let nav = useNavigate();
+    const theme = useContext(appThemes);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -89,25 +92,13 @@ function UpdateUser() {
 
     return (
         <>
-            <div
-                className="containerRegister"
-                style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "8%", marginBottom: "2%", gap: "10px" }}
-            >
+            <div className="form-container" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <h1>Edit User</h1>
-                <form
-                    className="form-floating"
-                    onSubmit={formik.handleSubmit}
-                    style={{
-                        width: "55%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        border: "1px solid grey",
-                        padding: "20px",
-                    }}
-                >
-                    <div className="rowOne" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                <form className="form-floating edits" onSubmit={formik.handleSubmit}>
+                    <div
+                        className="rowOne"
+                        style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center", backgroundColor: theme.background, color: theme.color }}
+                    >
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -313,8 +304,8 @@ function UpdateUser() {
                         </div>
                     </div>
 
-                    <div className="submitBtn" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "15px" }}>
-                        <button className="btn btn-dark" type="submit">
+                    <div className="submitBtn">
+                        <button className="btn btn-dark" type="submit" style={{ backgroundColor: theme.color, color: theme.background }}>
                             Update User
                         </button>
                     </div>

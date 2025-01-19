@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getCardById } from "../services/cardsService";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { appThemes } from "../App";
 
 function CardDetails() {
     let { cardId } = useParams();
     let [currentCard, setCurrentCard] = useState(null);
     let [loading, setLoading] = useState(true);
+
+    const theme = useContext(appThemes);
 
     useEffect(() => {
         const fetchCard = async () => {
@@ -28,7 +31,21 @@ function CardDetails() {
 
     return (
         <>
-            <div className="cardData" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginTop: "8%", gap: "20px" }}>
+            <div
+                className="cardData"
+                style={{
+                    backgroundColor: theme.background,
+                    color: theme.color,
+                    width: "100%",
+                    height: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingTop: "8%",
+                    gap: "20px",
+                }}
+            >
                 <h1>{currentCard.title}</h1>
                 <h2>{currentCard.subtitle}</h2>
                 <div className="container" style={{ width: "100%", display: "flex", alignItems: "start", justifyContent: "center", gap: "50px" }}>
