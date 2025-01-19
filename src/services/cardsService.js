@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let apiCards = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards";
+let apiCards = import.meta.env.VITE_API_URL_CARDS;
 const userToken = localStorage.getItem("token");
 
 export function getAllCards() {

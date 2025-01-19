@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-let apiUsers = `https://monkfish-app-z9uza.ondigitalocean.app/bcard2/users`;
+let apiUsers = import.meta.env.VITE_API_URL_USERS;
 const userToken = localStorage.getItem("token");
 
 export function getAllUsers() {
