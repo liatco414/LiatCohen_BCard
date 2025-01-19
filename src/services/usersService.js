@@ -27,11 +27,9 @@ export function loginUser(user) {
     return axios
         .post(`${apiUsers}/login`, data, config)
         .then((response) => {
-            console.log(response.data);
             return response.data;
         })
         .catch((error) => {
-            console.error("Login failed:", error);
             throw error;
         });
 }
@@ -72,12 +70,9 @@ export function addUser(user) {
 
     return axios(config)
         .then((response) => {
-            console.log("server response: ", response);
-
             return response.data ? response.data : response;
         })
         .catch((error) => {
-            console.error("Error adding user:", error.response ? error.response.data : error.message);
             throw error;
         });
 }
@@ -92,15 +87,9 @@ export function businessStatus() {
         },
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            console.log(JSON.stringify(response.data));
-            return response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }
 
 export function getUserById(userId) {
@@ -113,14 +102,9 @@ export function getUserById(userId) {
         },
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }
 
 export function updateUser(userId, userData) {
@@ -156,13 +140,7 @@ export function updateUser(userId, userData) {
         data: data,
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            console.log(response.data);
-            return response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }

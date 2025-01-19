@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import { cardLikes, editCardById, getAllCards } from "../services/cardsService";
+import { cardLikes, deleteCard, getAllCards } from "../services/cardsService";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import FavCards from "./FavCards";
 import { appThemes, cardTheme } from "../App";
+import "../css/cardComponents.css";
+import { errorMsg } from "../services/feedbackService";
 
 function Home({ searchTerm }) {
     const [loading, setLoading] = useState(true);
@@ -15,24 +16,23 @@ function Home({ searchTerm }) {
     const [filteredCards, setFilteredCards] = useState([]);
 
     useEffect(() => {
+        setUserToken(localStorage.getItem("token"));
         if (userToken) {
             try {
                 const decoded = jwtDecode(userToken);
                 setUserId(decoded._id);
                 setIsBusiness(decoded.isBusiness);
             } catch (error) {
-                console.error("Invalid token:", error);
+                errorMsg("Authentication error, please try to login again");
             }
         }
 
-        getAllCards()
-            .then((res) => {
-                const allCards = res.data;
-                setHomeCards(allCards);
-                setFilteredCards(allCards);
-                setLoading(false);
-            })
-            .catch((error) => console.log(error));
+        getAllCards().then((res) => {
+            const allCards = res.data;
+            setHomeCards(allCards);
+            setFilteredCards(allCards);
+            setLoading(false);
+        });
     }, [userToken]);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ function Home({ searchTerm }) {
                     .then(() => {
                         setHomeCards((prevCards) => prevCards.map((prevCard) => (prevCard._id === cardId ? { ...prevCard, likes: updatedLikes } : prevCard)));
                     })
-                    .catch((error) => console.log(error.response?.data));
+                    .catch(() => errorMsg("Something went wrong with saving the like"));
             }
             return card;
         });
@@ -73,27 +73,21 @@ function Home({ searchTerm }) {
     const loadMore = () => {
         setDisplayCount((prev) => prev + 3);
     };
+    const cardDelete = async (cardId) => {
+        try {
+            const removeCard = await deleteCard(cardId);
+            setFilteredCards((prevCards) => prevCards.filter((card) => card._id !== cardId));
+        } catch (error) {
+            errorMsg("Couldn't delete card");
+        }
+    };
 
     const displayedCards = searchTerm ? filteredCards.slice(0, displayCount) : homeCards.slice(0, displayCount);
     const theme = useContext(appThemes);
     const themeCard = useContext(cardTheme);
     return (
         <>
-            <div
-                className="container-home"
-                style={{
-                    paddingTop: "7%",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    paddingBottom: "20px",
-                    backgroundColor: theme.background,
-                    color: theme.color,
-                }}
-            >
+            <div className="container-home" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <div className="h1p" style={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                     <h1>Business cards</h1>
                     <p style={{ width: "65%", textAlign: "center", fontSize: "1.2em" }}>
@@ -102,10 +96,7 @@ function Home({ searchTerm }) {
                     </p>
                     <div className="line"></div>
                 </div>
-                <div
-                    className="business-cards"
-                    style={{ width: "100%", display: "grid", gridTemplateColumns: "repeat(2, 400px)", alignItems: "center", justifyContent: "center", gap: "20px", padding: "30px" }}
-                >
+                <div className="business-cards">
                     {loading ? (
                         <div style={{ display: "grid", gridColumn: "span 3", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
                             <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/ZC9Y.gif" alt="loading..." />
@@ -148,10 +139,10 @@ function Home({ searchTerm }) {
                                             {card.description}
                                         </li>
                                     </ul>
-                                    <div className="card-body" style={{ height: "30%", display: "flex", alignItems: "center", justifyContent: "end", fontSize: "1.3em", gap: "10px" }}>
-                                        <Link style={{ backgroundColor: themeCard.background, color: themeCard.color }} to={card.phone}>
-                                            <i className="fa-solid fa-phone"></i>
-                                        </Link>
+                                    <div
+                                        className="card-body"
+                                        style={{ height: "30%", display: "flex", alignItems: "center", justifyContent: "end", fontSize: "1.3em", gap: "10px", flexDirection: "row-reverse" }}
+                                    >
                                         {userToken && (
                                             <div onClick={() => handleLike(card._id)}>
                                                 {card.likes.includes(userId) ? (
@@ -161,6 +152,18 @@ function Home({ searchTerm }) {
                                                 )}
                                             </div>
                                         )}
+                                        <Link style={{ backgroundColor: themeCard.background, color: themeCard.color }} to={card.phone}>
+                                            <i className="fa-solid fa-phone"></i>
+                                        </Link>
+                                        {userToken && isBusiness && userId === card.user_id ? (
+                                            <>
+                                                <Link to={`/cards/${card._id}`}>
+                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                </Link>
+
+                                                <i onClick={() => cardDelete(card._id)} className="fa-solid fa-trash" style={{ color: "red", cursor: "pointer" }}></i>
+                                            </>
+                                        ) : null}
                                     </div>
                                 </div>
                             </div>

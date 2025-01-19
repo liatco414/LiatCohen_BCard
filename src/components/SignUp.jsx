@@ -1,12 +1,11 @@
 import { errorMsg, successMsg } from "../services/feedbackService";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { addUser, loginUser } from "../services/usersService";
+import { addUser } from "../services/usersService";
 import { useContext, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import LoggedInNavBar from "./LoggedInNavBar";
 import { appThemes } from "../App";
-
+import "../css/formEdit.css";
 function SignUp({ setIsLoggedIn, onHide }) {
     const [isBusiness, setIsBusiness] = useState(false);
 
@@ -80,7 +79,6 @@ function SignUp({ setIsLoggedIn, onHide }) {
                 let response = await addUser(values);
 
                 if (response) {
-                    console.log(response);
                     successMsg("User registered successfully, login to confirm user");
                     setTimeout(() => {
                         window.location.href = "/login";
@@ -89,8 +87,6 @@ function SignUp({ setIsLoggedIn, onHide }) {
                     handleBusinessUser();
                 }
             } catch (error) {
-                console.log(error.response?.data);
-
                 errorMsg("An error occured while signing up, please try again later");
             }
         },
@@ -100,41 +96,104 @@ function SignUp({ setIsLoggedIn, onHide }) {
         <>
             <div className="containerRegister" style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                 <form className="form-floating" onSubmit={formik.handleSubmit} style={{ width: "90%" }}>
-                    <div className="rowOne" style={{ display: "flex", gap: "20px" }}>
+                    <div className="formRow1" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputFirstName" placeholder="First Name" name="name.first" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputFirstName"
+                                placeholder="First Name"
+                                name="name.first"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputFirstName">First Name</label>
                             {formik.touched.name?.first && formik.errors.name?.first && <p className="text-danger">{formik.errors.name.first}</p>}
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputMiddleName" placeholder="Middle Name" name="name.middle" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputMiddleName"
+                                placeholder="Middle Name"
+                                name="name.middle"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputMiddleName">Middle Name</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputLastName" placeholder="Last Name" name="name.last" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputLastName"
+                                placeholder="Last Name"
+                                name="name.last"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputLastName">Last Name</label>
                             {formik.touched.name?.last && formik.errors.name?.last && <p className="text-danger">{formik.errors.name.last}</p>}
                         </div>
                     </div>
-                    <div className="rowTwo" style={{ display: "flex", gap: "20px" }}>
+                    <div className="formRow2" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputState" placeholder="State" name="address.state" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputState"
+                                placeholder="State"
+                                name="address.state"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputState">State</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputCountry" placeholder="Country" name="address.country" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputCountry"
+                                placeholder="Country"
+                                name="address.country"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputCountry">Country</label>
                             {formik.touched.address?.country && formik.errors.address?.country && <p className="text-danger">{formik.errors.address.country}</p>}
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputCity" placeholder="City" name="address.city" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputCity"
+                                placeholder="City"
+                                name="address.city"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputCity">City</label>
                             {formik.touched.address?.city && formik.errors.address?.city && <p className="text-danger">{formik.errors.address.city}</p>}
                         </div>
                     </div>
-                    <div className="rowThree" style={{ display: "flex", gap: "20px" }}>
+                    <div className="formRow3" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputStreet" placeholder="Street" name="address.street" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputStreet"
+                                placeholder="Street"
+                                name="address.street"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputCinty">Street</label>
                             {formik.touched.address?.street && formik.errors.address?.street && <p className="text-danger">{formik.errors.address.street}</p>}
                         </div>
@@ -147,39 +206,94 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 name="address.houseNumber"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
                             />
                             <label htmlFor="inputCinty">House Number</label>
                             {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="number" className="form-control" id="inputZip" placeholder="Zip" name="address.zip" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="inputZip"
+                                placeholder="Zip"
+                                name="address.zip"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputZip">Zip</label>
                             {formik.touched.address?.zip && formik.errors.address?.zip && <p className="text-danger">{formik.errors.address.zip}</p>}
                         </div>
                     </div>
-                    <div className="rowFour" style={{ display: "flex", gap: "20px" }}>
+                    <div className="formRow4" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputPhone" placeholder="Phone" name="phone" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputPhone"
+                                placeholder="Phone"
+                                name="phone"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputZip">Phone</label>
                             {formik.touched.phone && formik.errors.phone && <p className="text-danger">{formik.errors.phone}</p>}
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="email" className="form-control" id="inputEmail" placeholder="name@example.com" name="email" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="inputEmail"
+                                placeholder="name@example.com"
+                                name="email"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputEmail">Email Adress</label>
                             {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="url" className="form-control" id="inputImage" placeholder="Image URL" name="image.url" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="url"
+                                className="form-control"
+                                id="inputImage"
+                                placeholder="Image URL"
+                                name="image.url"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputImage">Image URL</label>
                         </div>
                     </div>
-                    <div className="rowFive" style={{ display: "flex", gap: "20px" }}>
+                    <div className="formRow5" style={{ display: "flex", gap: "20px" }}>
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="inputAlt" placeholder="Image Alt" name="image.alt" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="inputAlt"
+                                placeholder="Image Alt"
+                                name="image.alt"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputAlt">Image Alt</label>
                         </div>
                         <div className="form-floating mb-3">
-                            <input type="password" className="form-control" id="inputPassword" placeholder="Password" name="password" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="inputPassword"
+                                placeholder="Password"
+                                name="password"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                style={{ width: "200px" }}
+                            />
                             <label htmlFor="inputPassword">Password</label>
                             {formik.touched.password && formik.errors.password && <p className="text-danger">{formik.errors.password}</p>}
                         </div>
@@ -187,7 +301,7 @@ function SignUp({ setIsLoggedIn, onHide }) {
                     <div className="submitBtn" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "15px" }}>
                         <label>
                             <input type="checkbox" name="isBusiness" checked={formik.values.isBusiness} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                            <span style={{ margin: "5px" }}> Is this a business?</span>
+                            <span style={{ color: theme.color }}> Is this a business?</span>
                         </label>
                         <button
                             className="btn btn-dark"

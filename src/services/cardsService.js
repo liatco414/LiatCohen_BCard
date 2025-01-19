@@ -1,6 +1,4 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { use } from "react";
 
 let apiCards = "https://monkfish-app-z9uza.ondigitalocean.app/bcard2/cards";
 const userToken = localStorage.getItem("token");
@@ -43,18 +41,12 @@ export function editCardById(cardId, cardData) {
         data: data,
     };
 
-    return axios(config)
-        .then((response) => {
-            if (response.status === 200 && response.data) {
-                console.log("Server response:", response);
-                return response.data;
-            }
-            throw new Error("Update failed or returned unexpected data");
-        })
-        .catch((error) => {
-            console.error("Full error details:", error.response?.data || error);
-            throw error;
-        });
+    return axios(config).then((response) => {
+        if (response.status === 200 && response.data) {
+            return response.data;
+        }
+        throw new Error("Update failed or returned unexpected data");
+    });
 }
 export function newCard(user) {
     const data = {
@@ -78,8 +70,6 @@ export function newCard(user) {
         },
     };
 
-    console.log("Sending data:", data);
-
     const config = {
         method: "post",
         maxBodyLength: Infinity,
@@ -91,16 +81,9 @@ export function newCard(user) {
         data: data,
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            console.log("Success:", response);
-            return response.data;
-        })
-        .catch((error) => {
-            console.error("Error:", error.response?.data);
-            throw error;
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }
 
 export function getCardById(cardId) {
@@ -111,15 +94,9 @@ export function getCardById(cardId) {
         headers: {},
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            return response.data;
-        })
-        .catch((error) => {
-            console.log(error);
-            throw error;
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }
 
 export function deleteCard(cardId, bizNum) {
@@ -138,15 +115,9 @@ export function deleteCard(cardId, bizNum) {
         data: data,
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            console.log(response.data);
-            return response.data;
-        })
-        .catch((error) => {
-            console.log(error.response?.data);
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }
 export function cardLikes(cardId, updatedLikes) {
     const data = {
@@ -163,14 +134,7 @@ export function cardLikes(cardId, updatedLikes) {
         data: data,
     };
 
-    return axios
-        .request(config)
-        .then((response) => {
-            console.log("Like update successful:", response.data);
-            return response.data;
-        })
-        .catch((error) => {
-            console.error("Like update failed:", error);
-            throw error;
-        });
+    return axios.request(config).then((response) => {
+        return response.data;
+    });
 }

@@ -2,9 +2,9 @@ import { jwtDecode } from "jwt-decode";
 import { useContext, useEffect, useState } from "react";
 import { cardLikes, deleteCard, getAllCards, getCardById } from "../services/cardsService";
 import { Link } from "react-router-dom";
-import CreateCardModal from "./createCardModal";
-import CreateCard from "./CreateCard";
 import { appThemes, cardTheme, navBarThemes } from "../App";
+import "../css/cardComponents.css";
+import { errorMsg } from "../services/feedbackService";
 
 function MyCards({ setCreateCard, searchTerm }) {
     const [cards, setCards] = useState([]);
@@ -27,7 +27,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                 setUserId(userId);
                 setIsBusiness(isBusiness);
             } catch (error) {
-                console.error("Invalid token:", error);
+                errorMsg("Authentication error, please try to login again");
             }
         }
     }, [userToken]);
@@ -44,13 +44,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                     setCards(userCards);
                 }
             } catch (error) {
-                console.error("Error details:", {
-                    error,
-                    message: error?.message,
-                    response: error?.response,
-                    status: error?.response?.status,
-                });
-                setError("Failed to load cards");
+                errorMsg("Failed to load cards");
             } finally {
                 setLoading(false);
             }
@@ -88,7 +82,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                     .then(() => {
                         setCards((prevCards) => prevCards.map((prevCard) => (prevCard._id === cardId ? { ...prevCard, likes: updatedLikes } : prevCard)));
                     })
-                    .catch((error) => console.log(error.response?.data));
+                    .catch(() => errorMsg("Something went wrong with saving the like"));
             }
             return card;
         });
@@ -100,29 +94,21 @@ function MyCards({ setCreateCard, searchTerm }) {
             const removeCard = await deleteCard(cardId);
             setCards((prevCards) => prevCards.filter((card) => card._id !== cardId));
         } catch (error) {
-            console.error("Error deleting card:", error);
+            errorMsg("Couldn't delete card");
         }
     };
 
     const displayedCards = searchTerm ? filteredCards : cards;
     const theme = useContext(appThemes);
     const themeCard = useContext(cardTheme);
-    const btnTheme = useContext(navBarThemes);
 
     return (
         <>
             <div
-                className="userCards"
+                className="container-home"
                 style={{
                     backgroundColor: theme.background,
                     color: theme.color,
-                    paddingTop: "7%",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
                 }}
             >
                 <h1 style={{ fontWeight: "900" }}>Your Cards</h1>
@@ -130,18 +116,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                     Add Card
                 </button>
 
-                <div
-                    className="business-cards"
-                    style={{
-                        width: "100%",
-                        display: "grid",
-                        gridTemplateColumns: "repeat(2, 400px)",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "20px",
-                        padding: "30px",
-                    }}
-                >
+                <div className="business-cards">
                     {loading ? (
                         <div
                             style={{

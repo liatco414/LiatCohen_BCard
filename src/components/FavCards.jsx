@@ -1,8 +1,10 @@
 import { jwtDecode } from "jwt-decode";
-import { cardLikes, getAllCards } from "../services/cardsService";
+import { cardLikes, deleteCard, getAllCards } from "../services/cardsService";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { appThemes, cardTheme } from "../App";
+import "../css/cardComponents.css";
+import { errorMsg } from "../services/feedbackService";
 
 function FavCards() {
     const [favCards, setFavCards] = useState([]);
@@ -10,6 +12,7 @@ function FavCards() {
     const userToken = localStorage.getItem("token");
     const decoded = jwtDecode(userToken);
     const userId = decoded._id;
+    const isBusiness = decoded.isBusiness;
     const theme = useContext(appThemes);
     const themeCard = useContext(cardTheme);
 
@@ -17,7 +20,6 @@ function FavCards() {
         getAllCards().then((res) => {
             let allCards = res.data;
             let userLikes = allCards.filter((card) => card.likes && card.likes.includes(userId));
-            console.log("User Likes:", userLikes);
             setFavCards(userLikes);
             setLoading(false);
         });
@@ -31,29 +33,23 @@ function FavCards() {
 
             setFavCards((prevFavCards) => prevFavCards.filter((card) => card._id !== cardId));
         } catch (error) {
-            console.error("Error updating like:", error);
+            errorMsg("Something went wrong with saving the like");
+        }
+    };
+    const cardDelete = async (cardId) => {
+        try {
+            const removeCard = await deleteCard(cardId);
+            setFavCards((prevCards) => prevCards.filter((card) => card._id !== cardId));
+        } catch (error) {
+            errorMsg("Couldn't delete card");
         }
     };
     let isLoggedIn = localStorage.getItem("token");
-    let isBusiness = localStorage.getItem("businessUser");
     return (
         <>
-            <div
-                className="favCards-container"
-                style={{
-                    backgroundColor: theme.background,
-                    color: theme.color,
-                    width: "100%",
-                    height: "100%",
-                    paddingTop: "7%",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
+            <div className="container-home" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <h1>Your Favorite Cards</h1>
-                <div className="business-cards" style={{ display: "grid", gridTemplateColumns: "repeat(2, 28rem)", alignItems: "center", justifyContent: "center", padding: "30px" }}>
+                <div className="business-cards">
                     {loading ? (
                         <div style={{ display: "grid", gridColumn: "span 3", justifyContent: "center", alignItems: "center" }}>
                             <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/ZC9Y.gif" alt="loading..." />
@@ -122,6 +118,15 @@ function FavCards() {
                                             <Link>
                                                 <i className="fa-solid fa-pen-to-square"></i>
                                             </Link>
+                                        </>
+                                    ) : null}
+                                    {userToken && isBusiness && userId === favCard.user_id ? (
+                                        <>
+                                            <Link to={`/cards/${favCard._id}`}>
+                                                <i className="fa-solid fa-pen-to-square"></i>
+                                            </Link>
+
+                                            <i onClick={() => cardDelete(favCard._id)} className="fa-solid fa-trash" style={{ color: "red", cursor: "pointer" }}></i>
                                         </>
                                     ) : null}
                                 </div>

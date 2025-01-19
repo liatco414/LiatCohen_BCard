@@ -4,8 +4,11 @@ import { Links, useParams } from "react-router-dom";
 import { use } from "react";
 import { Link } from "react-router-dom";
 import { appThemes, cardTheme } from "../App";
+import { errorMsg } from "../services/feedbackService";
 
 function Profile() {
+    const theme = useContext(appThemes);
+    const themeCard = useContext(cardTheme);
     let [userDetails, setUserDetails] = useState(null);
     let [loading, setLoading] = useState(true);
     let { userId } = useParams();
@@ -14,15 +17,15 @@ function Profile() {
         const fetchUser = async () => {
             try {
                 let userData = await getUserById(userId);
-                console.log(userData);
                 setUserDetails(userData);
                 setLoading(false);
             } catch (error) {
-                console.log(error.response?.data);
+                errorMsg("Something went worng please try again later");
             }
         };
         fetchUser();
     }, [userId]);
+
     if (loading || !userDetails) return <p>Loading...</p>;
     let businessUser;
     if (userDetails.isBusiness === true) {
@@ -30,8 +33,7 @@ function Profile() {
     } else {
         businessUser = "Guest";
     }
-    const theme = useContext(appThemes);
-    const themeCard = useContext(cardTheme);
+
     return (
         <>
             <div

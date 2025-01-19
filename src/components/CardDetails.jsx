@@ -3,9 +3,11 @@ import { getCardById } from "../services/cardsService";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { appThemes } from "../App";
+import { errorMsg } from "../services/feedbackService";
 
 function CardDetails() {
     let { cardId } = useParams();
+
     let [currentCard, setCurrentCard] = useState(null);
     let [loading, setLoading] = useState(true);
 
@@ -15,11 +17,9 @@ function CardDetails() {
         const fetchCard = async () => {
             try {
                 const cardData = await getCardById(cardId);
-                console.log("Card Data:", cardData);
                 setCurrentCard(cardData);
                 setLoading(false);
             } catch (error) {
-                console.error("Error fetching card:", error);
                 setLoading(false);
             }
         };

@@ -73,12 +73,30 @@ function LogIn({ setIsLoggedIn }) {
                     }}
                 >
                     <div className="form-floating mb-3" style={{ margin: "30px", width: "350px" }}>
-                        <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" name="email" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="floatingInput"
+                            placeholder="name@example.com"
+                            name="email"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "350px" }}
+                        />
                         <label htmlFor="floatingInput">Email address</label>
                         {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                     </div>
                     <div className="form-floating" style={{ margin: "30px", width: "350px" }}>
-                        <input type="password" className="form-control" id="floatingPassword" placeholder="Password" name="password" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="floatingPassword"
+                            placeholder="Password"
+                            name="password"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "350px" }}
+                        />
                         <label htmlFor="floatingPassword">Password</label>
                         {formik.touched.password && formik.errors.password && <p className="text-danger">{formik.errors.password}</p>}
                     </div>

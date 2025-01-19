@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { getUserById, updateUser } from "../services/usersService";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
-import { successMsg } from "../services/feedbackService";
+import { errorMsg, successMsg } from "../services/feedbackService";
 import "../css/formEdit.css";
 import { appThemes } from "../App";
 
@@ -21,7 +21,7 @@ function UpdateUser() {
                     setUserUpdate(response);
                 }
             } catch (error) {
-                console.log(error.response?.data);
+                errorMsg("Couldn't find user");
             }
         };
         fetchUser();
@@ -79,13 +79,12 @@ function UpdateUser() {
             try {
                 const response = await updateUser(userId, values);
                 if (response) {
-                    console.log(response);
                     successMsg("User is updated");
                     setUserUpdate(response);
                     nav(`/profile/${userId}`);
                 }
             } catch (error) {
-                console.log(error.response?.data);
+                errorMsg("Couldn't update user, please try again later");
             }
         },
     });
@@ -94,11 +93,8 @@ function UpdateUser() {
         <>
             <div className="form-container" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <h1>Edit User</h1>
-                <form className="form-floating edits" onSubmit={formik.handleSubmit}>
-                    <div
-                        className="rowOne"
-                        style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center", backgroundColor: theme.background, color: theme.color }}
-                    >
+                <form className="form-floating form" onSubmit={formik.handleSubmit}>
+                    <div className="row1" style={{ backgroundColor: theme.background, color: theme.color }}>
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -109,7 +105,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.name?.first || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputFirstName">First Name</label>
                             {formik.touched.name?.first && formik.errors.name?.first && <p className="text-danger">{formik.errors.name.first}</p>}
@@ -124,12 +119,11 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.name?.middle || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputMiddleName">Middle Name</label>
                         </div>
                     </div>
-                    <div className="rowTwo" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row2">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -140,7 +134,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.name?.last || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputLastName">Last Name</label>
                             {formik.touched.name?.last && formik.errors.name?.last && <p className="text-danger">{formik.errors.name.last}</p>}
@@ -155,12 +148,11 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.state || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputState">State</label>
                         </div>
                     </div>
-                    <div className="rowThree" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row3">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -171,7 +163,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.country || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputCountry">Country</label>
                             {formik.touched.address?.country && formik.errors.address?.country && <p className="text-danger">{formik.errors.address.country}</p>}
@@ -186,13 +177,12 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.city || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputCity">City</label>
                             {formik.touched.address?.city && formik.errors.address?.city && <p className="text-danger">{formik.errors.address.city}</p>}
                         </div>
                     </div>
-                    <div className="rowFour" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row4">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -203,7 +193,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.street || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputCinty">Street</label>
                             {formik.touched.address?.street && formik.errors.address?.street && <p className="text-danger">{formik.errors.address.street}</p>}
@@ -218,13 +207,12 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.houseNumber || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputCinty">House Number</label>
                             {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                         </div>
                     </div>
-                    <div className="rowFive" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row5">
                         <div className="form-floating mb-3">
                             <input
                                 type="number"
@@ -235,7 +223,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.zip || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputZip">Zip</label>
                             {formik.touched.address?.zip && formik.errors.address?.zip && <p className="text-danger">{formik.errors.address.zip}</p>}
@@ -250,13 +237,12 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.phone || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputZip">Phone</label>
                             {formik.touched.phone && formik.errors.phone && <p className="text-danger">{formik.errors.phone}</p>}
                         </div>
                     </div>
-                    <div className="rowSix" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row6">
                         <div className="form-floating mb-3">
                             <input
                                 type="email"
@@ -267,7 +253,6 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.email || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputEmail">Email Adress</label>
                             {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
@@ -282,23 +267,21 @@ function UpdateUser() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.image?.url || ""}
-                                style={{ width: "320px" }}
                             />
                             <label htmlFor="inputImage">Image URL</label>
                         </div>
                     </div>
-                    <div className="rowSeven" style={{ width: "100%", display: "flex", gap: "20px", alignItems: "center", justifyContent: "center" }}>
+                    <div className="row7">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
-                                className="form-control"
+                                className="form-control last"
                                 id="inputAlt"
                                 placeholder="Image Alt"
                                 name="image.alt"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.image?.alt || ""}
-                                style={{ width: "420px" }}
                             />
                             <label htmlFor="inputAlt">Image Alt</label>
                         </div>

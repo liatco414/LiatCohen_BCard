@@ -17,7 +17,7 @@ function LoggedInNavBar({ setShowLogOutModal, checkIfIsBusiness, isBusiness, isL
                 const decode = jwtDecode(userToken);
                 setUserId(decode._id);
             } catch (error) {
-                console.error("Invalid token:", error);
+                errorMsg("Authentication error, please try to login again");
             }
         }
     }, [userToken]);

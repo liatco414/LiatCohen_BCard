@@ -45,27 +45,23 @@ function CreateCard({ onHide, setCards }) {
                 city: yup.string().required(),
                 street: yup.string().required(),
                 houseNumber: yup.number().min(1).required(),
-                zip: yup.number(),
+                zip: yup.number().required(),
             }),
         }),
         onSubmit: async (values) => {
             try {
                 const response = await newCard(values);
-                console.log("Card created successfully:", response);
-                const updatedCards = await getAllCards();
-                if (updatedCards) {
+                if (response) {
                     successMsg("Card created successfully");
                     onHide();
                     window.location.reload("/mycards");
                 }
             } catch (error) {
-                console.log(error.response?.data);
-
                 errorMsg("Failed to create card");
             }
         },
     });
-    const placeholderColor = theme === "dark" ? "#bbb" : "#888";
+    const requiredFields = ["title", "subtitle", "description", "phone", "email", "address.country", "address.city", "address.street", "address.houseNumber", "address.zip"];
 
     return (
         <>
@@ -80,6 +76,7 @@ function CreateCard({ onHide, setCards }) {
                             name="title"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "250px" }}
                         />
                         <label htmlFor="inputTitle" style={{ color: "black" }}>
                             Title
@@ -95,6 +92,7 @@ function CreateCard({ onHide, setCards }) {
                             name="subtitle"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "250px" }}
                         />
                         <label htmlFor="inputSubtitle" style={{ color: "black" }}>
                             Subtitle
@@ -132,6 +130,7 @@ function CreateCard({ onHide, setCards }) {
                             name="phone"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputZip" style={{ color: "black" }}>
                             Phone
@@ -147,6 +146,7 @@ function CreateCard({ onHide, setCards }) {
                             name="email"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputEmail" style={{ color: "black" }}>
                             Email Adress
@@ -154,7 +154,7 @@ function CreateCard({ onHide, setCards }) {
                         {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="inputWeb" placeholder="Web" name="web" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input type="text" className="form-control" id="inputWeb" placeholder="Web" name="web" onChange={formik.handleChange} onBlur={formik.handleBlur} style={{ width: "250px" }} />
                         <label htmlFor="inputWeb" style={{ color: "black" }}>
                             Web
                         </label>
@@ -163,13 +163,31 @@ function CreateCard({ onHide, setCards }) {
                 </div>
                 <div className="rowThree" style={{ display: "flex", gap: "20px" }}>
                     <div className="form-floating mb-3">
-                        <input type="url" className="form-control" id="inputImage" placeholder="Image URL" name="image.url" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="url"
+                            className="form-control"
+                            id="inputImage"
+                            placeholder="Image URL"
+                            name="image.url"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "250px" }}
+                        />
                         <label htmlFor="inputImage" style={{ color: "black" }}>
                             Image URL
                         </label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="inputAlt" placeholder="Image Alt" name="image.alt" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputAlt"
+                            placeholder="Image Alt"
+                            name="image.alt"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "250px" }}
+                        />
                         <label htmlFor="inputAlt" style={{ color: "black" }}>
                             Image Alt
                         </label>
@@ -177,7 +195,16 @@ function CreateCard({ onHide, setCards }) {
                 </div>
                 <div className="rowFour" style={{ display: "flex", gap: "20px" }}>
                     <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="inputState" placeholder="State" name="address.state" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputState"
+                            placeholder="State"
+                            name="address.state"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
+                        />
                         <label htmlFor="inputState" style={{ color: "black" }}>
                             State
                         </label>
@@ -197,6 +224,7 @@ function CreateCard({ onHide, setCards }) {
                             name="address.country"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputCountry" style={{ color: "black" }}>
                             Country
@@ -218,6 +246,7 @@ function CreateCard({ onHide, setCards }) {
                             name="address.city"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputCity" style={{ color: "black" }}>
                             City
@@ -241,6 +270,7 @@ function CreateCard({ onHide, setCards }) {
                             name="address.street"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputCinty" style={{ color: "black" }}>
                             Street
@@ -262,6 +292,7 @@ function CreateCard({ onHide, setCards }) {
                             name="address.houseNumber"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
                         />
                         <label htmlFor="inputCinty" style={{ color: "black" }}>
                             House Number
@@ -269,14 +300,28 @@ function CreateCard({ onHide, setCards }) {
                         {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="number" className="form-control" id="inputZip" placeholder="Zip" name="address.zip" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="inputZip"
+                            placeholder="Zip"
+                            name="address.zip"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            style={{ width: "200px" }}
+                        />
                         <label htmlFor="inputZip" style={{ color: "black" }}>
                             Zip
                         </label>
                     </div>
                 </div>
                 <div className="submitBtn" style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "15px" }}>
-                    <button className="btn btn-dark" type="submit">
+                    <button
+                        className="btn btn-dark"
+                        type="submit"
+                        disabled={!formik.isValid || requiredFields.some((field) => formik.values[field] === "")}
+                        style={{ backgroundColor: theme.color, color: theme.background }}
+                    >
                         Add Card
                     </button>
                 </div>

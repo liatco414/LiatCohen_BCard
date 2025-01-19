@@ -9,7 +9,7 @@
     padding-bottom: 2%;
     gap: 10px;
 }
-.edits {
+.form {
     width: 55%;
     display: flex;
     flex-direction: column;
@@ -18,6 +18,27 @@
     border: 1px solid grey;
     padding: 20px;
 }
+.row1,
+.row2,
+.row3,
+.row4,
+.row5,
+.row6,
+.row7 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.form-control {
+    width: 300px;
+}
+
+.last {
+    width: 420px;
+}
+
 .submitBtn {
     width: 100%;
     display: flex;
@@ -28,4 +49,42 @@
 }
 label {
     color: black;
+}
+
+@media (max-width: 1200px) {
+    label {
+        font-size: 0.8em;
+    }
+    .row1,
+    .row2,
+    .row3,
+    .row4,
+    .row5,
+    .row6,
+    .row7 {
+        display: flex;
+        flex-direction: column;
+    }
+    .formRow1,
+    .formRow2,
+    .formRow3,
+    .formRow4,
+    .formRow5 {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .last {
+        width: 200px;
+    }
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        padding-top: 25%;
+    }
+    .form {
+        border: none;
+    }
 }

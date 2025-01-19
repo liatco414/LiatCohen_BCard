@@ -40,6 +40,7 @@ function NavBar({ setShowRegister, onSearchChange, onModeChange }) {
                         aria-controls="navbarSupportedContent"
                         aria-expanded="false"
                         aria-label="Toggle navigation"
+                        style={{ backgroundColor: theme.color, color: theme.background }}
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>

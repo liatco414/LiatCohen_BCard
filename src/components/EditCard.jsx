@@ -20,7 +20,7 @@ function EditCard() {
                     setCardData(response);
                 }
             } catch (error) {
-                console.error("Error fetching card data:", error);
+                errorMsg("Something went wrong, check if card exist");
             }
         };
 
@@ -80,7 +80,6 @@ function EditCard() {
                     navigate("/mycards");
                 }
             } catch (error) {
-                console.error("Error updating card:", error.response?.data);
                 errorMsg("Failed to update card");
             }
         },
@@ -92,8 +91,8 @@ function EditCard() {
         <>
             <div className="form-container" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <h1>Edit Card</h1>
-                <form className="form-floating edits" onSubmit={formik.handleSubmit}>
-                    <div className="rowOne" style={{ display: "flex", gap: "20px" }}>
+                <form className="form-floating form" onSubmit={formik.handleSubmit}>
+                    <div className="row1">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -104,7 +103,6 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.title || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputTitle">Title</label>
                             {formik.touched.title && formik.errors.title && <p className="text-danger">{formik.errors.title}</p>}
@@ -119,15 +117,15 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.subtitle || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputSubtitle">Subtitle</label>
                             {formik.touched.subtitle && formik.errors.subtitle && <p className="text-danger">{formik.errors.subtitle}</p>}
                         </div>
                     </div>
-                    <div className="rowTwo" style={{ display: "flex", gap: "20px" }}>
+                    <div className="row2">
                         <div className="form-floating mb-3">
                             <textarea
+                                form
                                 className={`form-control ${
                                     formik.touched.description && formik.errors.description ? "is-invalid" : formik.touched.description && !formik.errors.description ? "is-valid" : ""
                                 }`}
@@ -137,7 +135,7 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.description || ""}
-                                style={{ height: "130px", width: "300px", resize: "none" }}
+                                style={{ height: "130px", resize: "none" }}
                             ></textarea>
                             <label htmlFor="inputDescription">Description</label>
                             {formik.touched.description && formik.errors.description && <p className="text-danger">{formik.errors.description}</p>}
@@ -153,7 +151,6 @@ function EditCard() {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.phone || ""}
-                                    style={{ width: "300px" }}
                                 />
                                 <label htmlFor="inputZip">Phone</label>
                                 {formik.touched.phone && formik.errors.phone && <p className="text-danger">{formik.errors.phone}</p>}
@@ -168,14 +165,13 @@ function EditCard() {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.email || ""}
-                                    style={{ width: "300px" }}
                                 />
                                 <label htmlFor="inputEmail">Email Address</label>
                                 {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                             </div>
                         </div>
                     </div>
-                    <div className="rowTen" style={{ display: "flex", gap: "20px" }}>
+                    <div className="row3">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -186,7 +182,6 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.web || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputWeb">Web</label>
                             {formik.touched.web && formik.errors.web && <p className="text-danger">{formik.errors.web}</p>}
@@ -201,12 +196,11 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.image?.url || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputImage">Image URL</label>
                         </div>
                     </div>
-                    <div className="rowThree" style={{ display: "flex", gap: "20px" }}>
+                    <div className="row4">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -217,7 +211,6 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.image?.alt || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputAlt">Image Alt</label>
                         </div>
@@ -231,12 +224,11 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.state || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputState">State</label>
                         </div>
                     </div>
-                    <div className="rowFour" style={{ display: "flex", gap: "20px" }}>
+                    <div className="row5">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -253,7 +245,6 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.country || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputCountry">Country</label>
                             {formik.touched.address?.country && formik.errors.address?.country && <p className="text-danger">{formik.errors.address.country}</p>}
@@ -274,13 +265,12 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.city || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputCity">City</label>
                             {formik.touched.address?.city && formik.errors.address?.city && <p className="text-danger">{formik.errors.address.city}</p>}
                         </div>
                     </div>
-                    <div className="rowFive" style={{ display: "flex", gap: "20px" }}>
+                    <div className="row6">
                         <div className="form-floating mb-3">
                             <input
                                 type="text"
@@ -297,7 +287,6 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.street || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputStreet">Street</label>
                             {formik.touched.address?.street && formik.errors.address?.street && <p className="text-danger">{formik.errors.address.street}</p>}
@@ -318,24 +307,22 @@ function EditCard() {
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.houseNumber || ""}
-                                style={{ width: "300px" }}
                             />
                             <label htmlFor="inputHouseNumber">House Number</label>
                             {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                         </div>
                     </div>
-                    <div className="rowFive" style={{ display: "flex", gap: "20px" }}>
+                    <div className="lastRow">
                         <div className="form-floating mb-3">
                             <input
                                 type="number"
-                                className="form-control"
+                                className="form-control last"
                                 id="inputZip"
                                 placeholder="Zip"
                                 name="address.zip"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 value={formik.values.address?.zip || ""}
-                                style={{ width: "430px" }}
                             />
                             <label htmlFor="inputZip">Zip</label>
                         </div>

@@ -1,23 +1,12 @@
 import { useContext } from "react";
 import { appThemes } from "../App";
+import "../css/cardComponents.css";
 
 function About() {
     const theme = useContext(appThemes);
     return (
         <>
-            <div
-                className="about"
-                style={{
-                    backgroundColor: theme.background,
-                    color: theme.color,
-                    paddingTop: "7%",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    textAlign: "center",
-                }}
-            >
+            <div className="about" style={{ backgroundColor: theme.background, color: theme.color }}>
                 <div className="h1p" style={{ padding: "15px" }}>
                     <h1 style={{ fontWeight: "900" }}>About Our Website</h1>
                     <p style={{ fontSize: "1.3em" }}>
