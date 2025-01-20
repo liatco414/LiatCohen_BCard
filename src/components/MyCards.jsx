@@ -112,7 +112,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                 }}
             >
                 <h1 style={{ fontWeight: "900" }}>Your Cards</h1>
-                <button className="btn" style={{ background: "rgb(158, 81, 206)", color: "white", fontWeight: "900" }} onClick={() => setCreateCard(true)}>
+                <button className="btn" style={{ background: "rgb(158, 81, 206)", color: "white", fontWeight: "900", boxShadow: themeCard.shadow }} onClick={() => setCreateCard(true)}>
                     Add Card
                 </button>
 
@@ -141,7 +141,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                                     color: themeCard.color,
                                     width: "22rem",
                                     height: "540px",
-                                    boxShadow: "2px 2px 6px rgb(72, 72, 72)",
+                                    boxShadow: themeCard.shadow,
                                     borderRadius: "15px",
                                     overflow: "hidden",
                                 }}
