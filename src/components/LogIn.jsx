@@ -7,7 +7,7 @@ import { errorMsg, successMsg } from "../services/feedbackService";
 import { useContext } from "react";
 import { appThemes } from "../App";
 
-function LogIn({ setIsLoggedIn }) {
+function LogIn({ setIsLoggedIn, setShowRegister }) {
     let nav = useNavigate();
     const theme = useContext(appThemes);
 
@@ -29,11 +29,12 @@ function LogIn({ setIsLoggedIn }) {
             loginUser(values)
                 .then((res) => {
                     if (res) {
-                        nav("/");
                         let userToken = res;
                         localStorage.setItem("token", userToken);
                         setIsLoggedIn(true);
                         successMsg("User logged in succefully");
+
+                        nav("/");
                     }
                 })
                 .catch((error) => {
@@ -104,7 +105,7 @@ function LogIn({ setIsLoggedIn }) {
                         login
                     </button>
                     <p>
-                        Don't have an account? <Link to={"/signup"}>Sign-Up</Link>
+                        Don't have an account? <Link onClick={() => setShowRegister(true)}>Sign-Up</Link>
                     </p>
                 </form>
             </div>

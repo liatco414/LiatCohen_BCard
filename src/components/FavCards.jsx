@@ -71,12 +71,14 @@ function FavCards() {
                                 key={favCard._id}
                             >
                                 <div className="img" style={{ height: "58%" }}>
-                                    <img
-                                        style={{ height: "100%", backgroundColor: themeCard.background, color: themeCard.color, boxShadow: themeCard.shadow }}
-                                        src={favCard.image.url}
-                                        className="card-img-top"
-                                        alt={favCard.title}
-                                    />
+                                    <Link to={`/${favCard._id}`} key={favCard._id} style={{ textDecoration: "none" }}>
+                                        <img
+                                            style={{ height: "100%", backgroundColor: themeCard.background, color: themeCard.color, boxShadow: themeCard.shadow }}
+                                            src={favCard.image.url}
+                                            className="card-img-top"
+                                            alt={favCard.title}
+                                        />
+                                    </Link>
                                 </div>
                                 <div className="card-body">
                                     <h5 className="card-title" style={{ backgroundColor: themeCard.background, color: themeCard.color }}>

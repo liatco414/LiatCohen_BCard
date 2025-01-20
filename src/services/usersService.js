@@ -2,7 +2,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
 let apiUsers = import.meta.env.VITE_API_URL_USERS;
-const userToken = localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token");
 
 export function getAllUsers() {
     return axios.get(apiUsers);
@@ -83,7 +83,7 @@ export function businessStatus() {
         maxBodyLength: Infinity,
         url: apiUsers,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
         },
     };
 
@@ -98,13 +98,16 @@ export function getUserById(userId) {
         maxBodyLength: Infinity,
         url: `${apiUsers}/${userId}`,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
         },
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => console.log(error.response.data));
 }
 
 export function updateUser(userId, userData) {
@@ -134,7 +137,7 @@ export function updateUser(userId, userData) {
         maxBodyLength: Infinity,
         url: `${apiUsers}/${userId}`,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
             "Content-Type": "application/json",
         },
         data: data,

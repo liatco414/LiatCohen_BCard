@@ -170,11 +170,14 @@ function App() {
                         <cardTheme.Provider value={darkMode ? cardThemes.dark : cardThemes.light}>
                             <appThemes.Provider value={darkMode ? themes.dark : themes.light}>
                                 <Routes>
-                                    <Route path="/profile/:userId" element={<Profile />} />
+                                    <Route path="/profile/:userId" element={<Profile setIsLoggedIn={setIsLoggedIn} />} />
                                     <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} setIsBusiness={setIsBusiness} searchTerm={searchTerm} />} />
                                     <Route path="/logout-modal" element={<LogOutModal />} />
                                     <Route path="/favcards" element={<FavCards />} />
-                                    <Route path="/mycards" element={<MyCards setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} searchTerm={searchTerm} />} />{" "}
+                                    <Route
+                                        path="/mycards"
+                                        element={<MyCards setIsLoggedIn={setIsLoggedIn} setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} searchTerm={searchTerm} />}
+                                    />{" "}
                                     <Route path="/:cardId" element={<CardDetails />} />
                                     <Route path="/cards/:cardId" element={<EditCard />} />
                                     <Route path="profile/:userId/edit-user/:userId" element={<UpdateUser />} />
@@ -196,7 +199,7 @@ function App() {
                                 <Routes>
                                     <Route exact path="/cards/:cardId" element={<CardDetails />} />
                                     <Route path="/" element={<Home searchTerm={searchTerm} />} />
-                                    <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} />} />
+                                    <Route path="/login" element={<LogIn setIsLoggedIn={setIsLoggedIn} setShowRegister={handleRegisterModal} />} />
                                     <Route path="/signup" element={<SignUp setIsLoggedIn={setIsLoggedIn} onHide={handleLogOutModal} handleAddUser={handleAddUser} />} />
                                     <Route path="/about" element={<About />} />
                                 </Routes>

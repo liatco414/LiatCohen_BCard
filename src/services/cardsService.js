@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let apiCards = import.meta.env.VITE_API_URL_CARDS;
-const userToken = localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token");
 
 export function getAllCards() {
     return axios.get(apiCards);
@@ -35,7 +35,7 @@ export function editCardById(cardId, cardData) {
         method: "put",
         url: `${apiCards}/${cardId}`,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
             "Content-Type": "application/json",
         },
         data: data,
@@ -76,7 +76,7 @@ export function newCard(user) {
         url: apiCards,
         headers: {
             "Content-Type": "application/json",
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
         },
         data: data,
     };
@@ -109,7 +109,7 @@ export function deleteCard(cardId, bizNum) {
         maxBodyLength: Infinity,
         url: `${apiCards}/${cardId}`,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
             "Content-Type": "application/json",
         },
         data: data,
@@ -128,7 +128,7 @@ export function cardLikes(cardId, updatedLikes) {
         method: "patch",
         url: `${apiCards}/${cardId}`,
         headers: {
-            "x-auth-token": userToken,
+            "x-auth-token": getToken(),
             "Content-Type": "application/json",
         },
         data: data,

@@ -125,7 +125,6 @@ function EditCard() {
                     <div className="row2">
                         <div className="form-floating mb-3">
                             <textarea
-                                form
                                 className={`form-control ${
                                     formik.touched.description && formik.errors.description ? "is-invalid" : formik.touched.description && !formik.errors.description ? "is-valid" : ""
                                 }`}

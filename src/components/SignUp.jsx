@@ -92,6 +92,8 @@ function SignUp({ setIsLoggedIn, onHide }) {
         },
     });
     const theme = useContext(appThemes);
+    const requiredFields = ["name.first", "name.last", "password", "phone", "email", "address.country", "address.city", "address.street", "address.houseNumber", "address.zip"];
+
     return (
         <>
             <div className="containerRegister" style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
@@ -108,7 +110,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputFirstName">First Name</label>
+                            <label htmlFor="inputFirstName">
+                                First Name<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.name?.first && formik.errors.name?.first && <p className="text-danger">{formik.errors.name.first}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -135,7 +139,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputLastName">Last Name</label>
+                            <label htmlFor="inputLastName">
+                                Last Name<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.name?.last && formik.errors.name?.last && <p className="text-danger">{formik.errors.name.last}</p>}
                         </div>
                     </div>
@@ -164,7 +170,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputCountry">Country</label>
+                            <label htmlFor="inputCountry">
+                                Country<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.address?.country && formik.errors.address?.country && <p className="text-danger">{formik.errors.address.country}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -178,7 +186,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputCity">City</label>
+                            <label htmlFor="inputCity">
+                                City<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.address?.city && formik.errors.address?.city && <p className="text-danger">{formik.errors.address.city}</p>}
                         </div>
                     </div>
@@ -194,7 +204,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputCinty">Street</label>
+                            <label htmlFor="inputCinty">
+                                Street<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.address?.street && formik.errors.address?.street && <p className="text-danger">{formik.errors.address.street}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -208,7 +220,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputCinty">House Number</label>
+                            <label htmlFor="inputCinty">
+                                House Number<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.address?.houseNumber && formik.errors.address?.houseNumber && <p className="text-danger">{formik.errors.address.houseNumber}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -222,7 +236,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputZip">Zip</label>
+                            <label htmlFor="inputZip">
+                                Zip<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.address?.zip && formik.errors.address?.zip && <p className="text-danger">{formik.errors.address.zip}</p>}
                         </div>
                     </div>
@@ -238,7 +254,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputZip">Phone</label>
+                            <label htmlFor="inputZip">
+                                Phone<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.phone && formik.errors.phone && <p className="text-danger">{formik.errors.phone}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -252,7 +270,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputEmail">Email Adress</label>
+                            <label htmlFor="inputEmail">
+                                Email Adress<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.email && formik.errors.email && <p className="text-danger">{formik.errors.email}</p>}
                         </div>
                         <div className="form-floating mb-3">
@@ -294,7 +314,9 @@ function SignUp({ setIsLoggedIn, onHide }) {
                                 onBlur={formik.handleBlur}
                                 style={{ width: "200px" }}
                             />
-                            <label htmlFor="inputPassword">Password</label>
+                            <label htmlFor="inputPassword">
+                                Password<span style={{ color: "red" }}>*</span>
+                            </label>
                             {formik.touched.password && formik.errors.password && <p className="text-danger">{formik.errors.password}</p>}
                         </div>
                     </div>
@@ -306,7 +328,7 @@ function SignUp({ setIsLoggedIn, onHide }) {
                         <button
                             className="btn btn-dark"
                             type="submit"
-                            disabled={!formik.isValid || Object.values(formik.values).some((value) => value === "")}
+                            disabled={!formik.isValid || requiredFields.some((field) => formik.values[field] === "")}
                             style={{ backgroundColor: theme.color, color: theme.background }}
                         >
                             Register

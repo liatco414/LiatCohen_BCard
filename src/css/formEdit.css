@@ -84,6 +84,9 @@ label {
         flex-direction: column;
         padding-top: 25%;
     }
+    .form-control {
+        width: 500px;
+    }
     .form {
         border: none;
     }

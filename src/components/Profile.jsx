@@ -1,30 +1,42 @@
 import { useContext, useEffect, useState } from "react";
 import { getUserById } from "../services/usersService";
-import { Links, useParams } from "react-router-dom";
+import { Links, useNavigate, useParams } from "react-router-dom";
 import { use } from "react";
 import { Link } from "react-router-dom";
 import { appThemes, cardTheme } from "../App";
 import { errorMsg } from "../services/feedbackService";
 
-function Profile() {
+function Profile({ setIsLoggedIn }) {
     const theme = useContext(appThemes);
     const themeCard = useContext(cardTheme);
     let [userDetails, setUserDetails] = useState(null);
     let [loading, setLoading] = useState(true);
     let { userId } = useParams();
 
+    let token = localStorage.getItem("token");
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                let userData = await getUserById(userId);
-                setUserDetails(userData);
-                setLoading(false);
+                const userData = await getUserById(userId);
+                if (userData && token) {
+                    setUserDetails(userData);
+                } else {
+                    errorMsg("User data not found");
+                }
             } catch (error) {
-                errorMsg("Something went worng please try again later");
+                console.error("Error fetching user:", error.response?.data);
+                errorMsg("Something went wrong, please try again later");
+            } finally {
+                setLoading(false);
             }
         };
-        fetchUser();
-    }, [userId]);
+        const timer = setTimeout(() => {
+            fetchUser();
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [userId, token]);
 
     if (loading || !userDetails) return <p>Loading...</p>;
     let businessUser;

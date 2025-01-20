@@ -12,13 +12,8 @@ function CreateCardModal({ show, onHide, setCards }) {
             </Modal.Header>
             <Modal.Body
                 style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    maxHeight: "80vh",
-                    overflowY: "auto",
-                    paddingBottom: "60px",
-                    paddingTop: "140px",
+                    overflowY: "scroll",
+                    maxHeight: "70vh",
                     backgroundColor: theme.background,
                     color: theme.color,
                 }}
