@@ -28,7 +28,13 @@ function CardDetails() {
         fetchCard();
     }, [cardId]);
 
-    if (loading || !currentCard) return <p>Loading...</p>;
+    if (loading || !currentCard)
+        return (
+            <div style={{ backgroundColor: theme.background, width: "100%", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {" "}
+                <img style={{ width: "20%", height: "30%" }} src="https://i.gifer.com/YlWC.gif" alt="loading..." />
+            </div>
+        );
 
     return (
         <>

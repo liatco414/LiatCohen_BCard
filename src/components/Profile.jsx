@@ -25,7 +25,6 @@ function Profile({ setIsLoggedIn }) {
                     errorMsg("User data not found");
                 }
             } catch (error) {
-                console.error("Error fetching user:", error.response?.data);
                 errorMsg("Something went wrong, please try again later");
             } finally {
                 setLoading(false);
@@ -38,7 +37,13 @@ function Profile({ setIsLoggedIn }) {
         return () => clearTimeout(timer);
     }, [userId, token]);
 
-    if (loading || !userDetails) return <p>Loading...</p>;
+    if (loading || !userDetails)
+        return (
+            <div style={{ backgroundColor: theme.background, width: "100%", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {" "}
+                <img style={{ width: "20%", height: "30%" }} src="https://i.gifer.com/YlWC.gif" alt="loading..." />
+            </div>
+        );
     let businessUser;
     if (userDetails.isBusiness === true) {
         businessUser = "Business User";

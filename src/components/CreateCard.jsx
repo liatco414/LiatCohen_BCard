@@ -61,8 +61,6 @@ function CreateCard({ onHide, setCards }) {
                     window.location.reload("/mycards");
                 }
             } catch (error) {
-                console.log(error.response?.data);
-
                 errorMsg("Failed to create card");
             }
         },

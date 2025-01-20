@@ -87,9 +87,14 @@ export function businessStatus() {
         },
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }
 
 export function getUserById(userId) {
@@ -107,7 +112,9 @@ export function getUserById(userId) {
         .then((response) => {
             return response.data;
         })
-        .catch((error) => console.log(error.response.data));
+        .catch((error) => {
+            throw error;
+        });
 }
 
 export function updateUser(userId, userData) {
@@ -143,7 +150,12 @@ export function updateUser(userId, userData) {
         data: data,
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }

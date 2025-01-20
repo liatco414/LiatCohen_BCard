@@ -99,7 +99,7 @@ function Home({ searchTerm }) {
                 <div className="business-cards">
                     {loading ? (
                         <div style={{ display: "grid", gridColumn: "span 3", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
-                            <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/ZC9Y.gif" alt="loading..." />
+                            <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/YlWC.gif" alt="loading..." />
                         </div>
                     ) : (
                         displayedCards.map((card) => (

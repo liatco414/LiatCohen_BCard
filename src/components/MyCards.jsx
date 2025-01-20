@@ -128,7 +128,7 @@ function MyCards({ setCreateCard, searchTerm }) {
                                 height: "100%",
                             }}
                         >
-                            <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/ZC9Y.gif" alt="loading..." />
+                            <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/YlWC.gif" alt="loading..." />
                         </div>
                     ) : cards.length === 0 ? (
                         <div>No cards found</div>

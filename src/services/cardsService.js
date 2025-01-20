@@ -81,9 +81,14 @@ export function newCard(user) {
         data: data,
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }
 
 export function getCardById(cardId) {
@@ -94,9 +99,14 @@ export function getCardById(cardId) {
         headers: {},
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }
 
 export function deleteCard(cardId, bizNum) {
@@ -115,9 +125,14 @@ export function deleteCard(cardId, bizNum) {
         data: data,
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }
 export function cardLikes(cardId, updatedLikes) {
     const data = {
@@ -134,7 +149,12 @@ export function cardLikes(cardId, updatedLikes) {
         data: data,
     };
 
-    return axios.request(config).then((response) => {
-        return response.data;
-    });
+    return axios
+        .request(config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            throw error;
+        });
 }
