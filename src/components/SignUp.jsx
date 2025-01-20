@@ -58,7 +58,7 @@ function SignUp({ setIsLoggedIn, onHide }) {
                 .max(20)
                 .matches(/[a-z]/, "Password must contain at least one lowercase letter")
                 .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-                .matches(/(?:.*\d){1,}/, "Password must contain at least one digits")
+                .matches(/(?:.*\d){4,}/, "Password must contain at least 4 digits")
                 .matches(/[!@%$#^&*-_*(]/, "Password must contain at least one of the special character: (!@%$#^&*-_*)"),
             phone: yup.string().min(9).max(11).required(),
             image: yup.object({
