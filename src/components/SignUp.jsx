@@ -7,17 +7,6 @@ import { jwtDecode } from "jwt-decode";
 import { appThemes } from "../App";
 import "../css/formEdit.css";
 function SignUp({ setIsLoggedIn, onHide }) {
-    const [isBusiness, setIsBusiness] = useState(false);
-
-    const handleBusinessUser = () => {
-        const userToken = localStorage.getItem("token");
-
-        if (userToken) {
-            const decoded = jwtDecode(userToken);
-            const business = Boolean(decoded.isBusiness);
-            setIsBusiness(business);
-        }
-    };
     let formik = useFormik({
         initialValues: {
             name: {

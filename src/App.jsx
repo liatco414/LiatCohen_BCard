@@ -173,7 +173,7 @@ function App() {
                                     <Route path="/profile/:userId" element={<Profile setIsLoggedIn={setIsLoggedIn} />} />
                                     <Route path="/" element={<Home setIsLoggedIn={setIsLoggedIn} setIsBusiness={setIsBusiness} searchTerm={searchTerm} />} />
                                     <Route path="/logout-modal" element={<LogOutModal />} />
-                                    <Route path="/favcards" element={<FavCards />} />
+                                    <Route path="/favcards" element={<FavCards searchTerm={searchTerm} />} />
                                     <Route
                                         path="/mycards"
                                         element={<MyCards setIsLoggedIn={setIsLoggedIn} setCreateCard={handleNewCardModal} setShowEditModal={handleEditCardModal} searchTerm={searchTerm} />}

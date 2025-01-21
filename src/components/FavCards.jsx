@@ -6,9 +6,11 @@ import { appThemes, cardTheme } from "../App";
 import "../css/cardComponents.css";
 import { errorMsg } from "../services/feedbackService";
 
-function FavCards() {
+function FavCards({ searchTerm }) {
     const [favCards, setFavCards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [displayCount, setDisplayCount] = useState();
+    const [filteredCards, setFilteredCards] = useState([]);
     const userToken = localStorage.getItem("token");
     const decoded = jwtDecode(userToken);
     const userId = decoded._id;
@@ -25,6 +27,19 @@ function FavCards() {
         });
     }, []);
 
+    useEffect(() => {
+        if (searchTerm) {
+            const filtered = favCards.filter(
+                (card) =>
+                    card.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    card.subtitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    card.description?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredCards(filtered);
+        } else {
+            setFilteredCards(favCards);
+        }
+    }, [searchTerm, favCards]);
     const handleLike = async (cardId) => {
         try {
             await cardLikes(cardId, userToken, {
@@ -45,6 +60,8 @@ function FavCards() {
         }
     };
     let isLoggedIn = localStorage.getItem("token");
+    const displayedCards = searchTerm ? filteredCards.slice(0, displayCount) : favCards.slice(0, displayCount);
+
     return (
         <>
             <div className="container-home" style={{ backgroundColor: theme.background, color: theme.color }}>
@@ -55,7 +72,7 @@ function FavCards() {
                             <img style={{ width: "90%", height: "80%" }} src="https://i.gifer.com/YlWC.gif" alt="loading..." />
                         </div>
                     ) : (
-                        favCards.map((favCard) => (
+                        displayedCards.map((favCard) => (
                             <div
                                 className="card"
                                 style={{
